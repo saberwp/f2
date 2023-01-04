@@ -2,7 +2,7 @@
 
 class Label {
 
-	public $type = 'label';
+	public $elementType = 'label';
 	public $classes = '';
 	public $text = 'Label';
 

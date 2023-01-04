@@ -15,11 +15,16 @@ class Form {
 		$this->data = $data;
 	}
 
+	// @TODO delete in favor of addControl when no longer used.
 	public function addField( $field ) {
 		$this->fields[] = $field;
 	}
 
-	public function setFieldGroups( $fieldGroups ) {
+	public function addControl( $control ) {
+		$this->fields[] = $control;
+	}
+
+	public function setFields( $fieldGroups ) {
 		$this->fieldGroups = $fieldGroups;
 	}
 

@@ -3,7 +3,7 @@
 class Field {
 
 	public $elements = array();
-	public $classes = '';
+	public $classes = 'flex flex-col gap-1';
 
 	public function addElement( $element ) {
 		$this->elements[] = $element;

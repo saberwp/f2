@@ -5,7 +5,7 @@ class Control {
 	public $elementType = 'control';
 	public $type = '';
 	public $key = '';
-	public $classes = '';
+	public $classes = 'border border-solid border-gray-700 px-2 py-1 text-sm';
 	public $placeholder = '';
 	public $choices = array();
 

@@ -79,5 +79,25 @@ add_filter('single_template', function( $template, $type, $templates ) {
 	}
 
 	return F2_PATH . '/wp/templates/single-app.php';
-	
+
 }, 10, 3);
+
+add_action('wp_enqueue_scripts', function() {
+
+	wp_enqueue_style(
+		'saberm-inter',
+		'https://rsms.me/inter/inter.css',
+		array(),
+		time(),
+		'all'
+	);
+
+	wp_enqueue_style(
+		'f2-output',
+		F2_URL . '/dist/output.css',
+		array(),
+		time(),
+		'all'
+	);
+
+});

@@ -3,7 +3,7 @@
 class Label {
 
 	public $elementType = 'label';
-	public $classes = '';
+	public $classes = 'block font-semibold pb-1 text-gray-500';
 	public $text = 'Label';
 
 	public function setClasses( $classes ) {

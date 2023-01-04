@@ -1,6 +1,13 @@
-<?php get_header('blank'); ?>
+<!doctype html>
+<html <?php language_attributes(); ?>>
+<head>
+	<meta charset="<?php bloginfo( 'charset' ); ?>" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+	<link rel='stylesheet' id='f2-output-css' href='http://sabermarketing.local/wp-content/plugins/f2/dist/output.css?ver=1672806654' media='all' />
+</head>
 
-<h1 class="h-80">HELLLLLLLLLLLL FROM F2</h1>
+<body>
 
 <div>
   <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
@@ -199,4 +206,13 @@
     </main>
   </div>
 </div>
-<?php get_footer('blank'); ?>
+
+<?php
+global $post;
+$appObj = new App;
+$app = $appObj->make($post->ID);
+echo '<script>var f2app = ' . json_encode($app) . '</script>';
+?>
+<script src='http://sabermarketing.local/wp-content/plugins/f2/src/main.js?ver=1672806654' id='f2-main-js'></script>
+</body>
+</html>

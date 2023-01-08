@@ -11,6 +11,10 @@ const f2 = {
 
 	init() {
 
+		console.log('f2 init:')
+		console.log('wp.api.models:')
+		console.log(wp.api.models)
+
 		const appEl = document.getElementById('f2app')
 		f2.appEl = appEl // Stash app element into controller object.
 		if(!appEl) {
@@ -259,7 +263,7 @@ const f2 = {
 			}
 
 			// Choose endpoint, protocol based on objectId.
-			let endpoint = 'http://sabermarketing.local/wp-json/wp/v2/'+model.key
+			let endpoint = 'http://f2.local/wp-json/wp/v2/'+model.key
 			let protocol = 'POST'
 			if( objectId > 0 ) {
 				endpoint += '/' + objectId
@@ -284,7 +288,7 @@ const f2 = {
 	},
 
 	fetchRecords(model) {
-		let endpoint = 'http://sabermarketing.local/wp-json/wp/v2/' + model.key
+		let endpoint = 'http://f2.local/wp-json/wp/v2/' + model.key
 		let protocol = 'GET'
 		fetch(endpoint, {
 			method: protocol,
@@ -488,7 +492,7 @@ const f2 = {
 		const objectId = btn.getAttribute('object-id')
 
 		/* DELETE request. */
-		fetch( 'http://sabermarketing.local/wp-json/wp/v2/' + modelKey + '/' + objectId + '?force=true', {
+		fetch( 'http://f2.local/wp-json/wp/v2/' + modelKey + '/' + objectId + '?force=true', {
 			method:'DELETE',
       credentials: 'include',
 			headers: {

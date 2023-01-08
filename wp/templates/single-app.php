@@ -208,9 +208,13 @@
 </div>
 
 <?php
-global $post;
 $appObj = new App;
-$app = $appObj->make($post->ID);
+if( $post->post_name === 'app' ) {
+	$coreApp = new CoreApp();
+	$app = $coreApp->make();
+} else {
+	$app = $appObj->make($post->ID);
+}
 echo '<script>var f2app = ' . json_encode($app) . '</script>';
 ?>
 <script src='http://sabermarketing.local/wp-content/plugins/f2/src/main.js?ver=1672806654' id='f2-main-js'></script>

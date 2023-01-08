@@ -15,54 +15,32 @@ require_once( F2_PATH . '/lib/FormProcessor.php' );
 require_once( F2_PATH . '/lib/Field.php' );
 require_once( F2_PATH . '/lib/FieldType.php' );
 require_once( F2_PATH . '/lib/Control.php' );
+require_once( F2_PATH . '/lib/CoreApp.php' );
 require_once( F2_PATH . '/lib/Label.php' );
 require_once( F2_PATH . '/lib/Storage.php' );
 require_once( F2_PATH . '/lib/Schema.php' );
 require_once( F2_PATH . '/lib/Fetch.php' );
 require_once( F2_PATH . '/lib/Model.php' );
 
-add_action('wp_enqueue_scripts', function() {
-
-	// Enqueue model controller script.
-	wp_enqueue_script(
-		'f2-model',
-		F2_URL . 'js/model.js',
-		array(),
-		time(),
-		true
-	);
-
-	// Enqueue main F2 app controller script.
-	wp_enqueue_script(
-		'f2-main',
-		F2_URL . 'js/main.js',
-		array(),
-		time(),
-		true
-	);
-
-	// Localize app data for use by JS.
-	$postType = get_post_type();
-	if( 'app' === $postType ) {
-		global $post;
-		$appObj = new App;
-		$app = $appObj->make($post->ID);
-		wp_localize_script( 'f2-main', 'f2app', $app );
-	}
-
-});
-
 // Register app post types.
 add_action('init', function() {
+
+	require_once( F2_PATH . '/wp/post-types/app.php' );
+	$coreApp = new CoreApp();
+	$app = $coreApp->make();
+	$app->storageInit();
 
 	$appPosts = get_posts(array(
 		'post_type' => 'app',
 		'numberposts' => -1,
 	));
 
-	if( !empty( $appPosts )) {
+	if( ! empty( $appPosts )) {
 		$appObj = new App;
 		foreach( $appPosts as $appPost ) {
+			if( $appPost->post_name === 'app' ) {
+				continue;
+			}
 			$app = $appObj->make($appPost->ID);
 			$app->storageInit();
 		}

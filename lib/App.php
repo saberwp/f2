@@ -48,7 +48,7 @@ class App {
 		echo '<div id="f2app" app-id="' . $post->ID . '"></div>';
 	}
 
-	function make( $postId ) {
+	public function make( $postId ) {
 
 		// Setup app object and storage.
 		$app = new App();
@@ -56,9 +56,18 @@ class App {
 		// Load app post and models.
 		$appPost = get_post($postId);
 		$appModels = get_post_meta($appPost->ID, 'models', 1);
+
+		if( strlen( $appModels ) < 4 ) {
+			return $app;
+		}
+
 		$appModelIds = explode(',', $appModels); // Parse the comma-seperated list of fields (1,2,3).
 
 		// Load model post and model fields.
+		if( empty( $appModelIds ) ) {
+			return $app;
+		}
+
 		foreach( $appModelIds as $appModelPostId ) {
 
 			$appModelPost = get_post($appModelPostId);

@@ -11,10 +11,6 @@ const f2 = {
 
 	init() {
 
-		console.log('f2 init:')
-		console.log('wp.api.models:')
-		console.log(wp.api.models)
-
 		const appEl = document.getElementById('f2app')
 		f2.appEl = appEl // Stash app element into controller object.
 		if(!appEl) {
@@ -231,6 +227,36 @@ const f2 = {
 		mc.appendChild(el)
 	},
 
+	appCreateProcess(objectId, formValues) {
+
+		// Make model post because it is an app being saved.
+		let modelPoster = new wp.api.models.Model({
+			title: 'App Default Model',
+			meta: {
+				name: 'Model Storage 123',
+				forms: '1,2,3'
+			},
+			status: 'publish'
+		})
+		modelPoster.save().done((modelObj) => {
+
+			console.log('model created:')
+			console.log(modelObj)
+
+			// Make app.
+			let modelPoster = new wp.api.models.App({
+				title: 'App',
+				meta: {
+					app_name: 'App Created',
+					models: String(modelObj.id)
+				},
+				status: 'publish'
+			})
+			modelPoster.save()
+		})
+
+	},
+
 	formProcessor(model) {
 
 		const appFormEl = document.getElementById('f2-app-form-'+model.key)
@@ -238,6 +264,8 @@ const f2 = {
 
 			const modelKey = e.target.getAttribute('modelKey')
 			const appFormEl = document.getElementById('f2-app-form-'+modelKey)
+
+
 
 			// Prevent default post submit.
 			e.preventDefault()
@@ -253,6 +281,13 @@ const f2 = {
 				formValues[field.key] = el.value
 			})
 
+			// Initialize special process for "app" models.
+			if('app' === modelKey) {
+				console.log('modelKey is app...')
+				f2.appCreateProcess(objectId, formValues)
+				return
+			}
+
 			// @TODO validate form values.
 
 			/* Set post data. */
@@ -262,7 +297,22 @@ const f2 = {
 			  meta: formValues,
 			}
 
+			// New WP Backbone PUT.
+			let postObject = {
+				meta: formValues,
+			}
+			if( objectId > 0 ) {
+				postObject.id = objectId
+			}
+			let post = new wp.api.models.App(postObject)
+			const fetchResult = post.save().done((resp) => {
+				console.log('App post/fetch/done:')
+				console.log(resp)
+				f2.triggerRecordsChangedEvent(model)
+			})
+
 			// Choose endpoint, protocol based on objectId.
+			/*
 			let endpoint = 'http://f2.local/wp-json/wp/v2/'+model.key
 			let protocol = 'POST'
 			if( objectId > 0 ) {
@@ -284,7 +334,10 @@ const f2 = {
 			})
 			.catch(err => console.log(err));
 
+			*/
+
 		})
+
 	},
 
 	fetchRecords(model) {

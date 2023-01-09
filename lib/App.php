@@ -57,7 +57,7 @@ class App {
 		$appPost = get_post($postId);
 		$appModels = get_post_meta($appPost->ID, 'models', 1);
 
-		if( strlen( $appModels ) < 4 ) {
+		if( strlen( $appModels ) < 2 ) {
 			return $app;
 		}
 

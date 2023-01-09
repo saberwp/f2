@@ -225,27 +225,41 @@ const f2 = {
 
 	appCreateProcess(objectId, formValues) {
 
-		// Make model post because it is an app being saved.
-		let modelPoster = new wp.api.models.Model({
-			title: 'App Default Model',
+		let formPoster = new wp.api.models.Form({
+			title: formValues.app_name+ ' Form',
 			meta: {
-				name: 'Model Storage 123',
-				forms: '1,2,3'
+				name: formValues.app_name+ ' Form',
+				fields: '1,2,3'
 			},
 			status: 'publish'
 		})
-		modelPoster.save().done((modelObj) => {
+		formPoster.save().done((formObj) => {
 
-			// Make app.
-			let modelPoster = new wp.api.models.App({
-				title: 'App',
+			// Make model post because it is an app being saved.
+			let modelPoster = new wp.api.models.Model({
+				title: formValues.app_name+ ' Model',
 				meta: {
-					app_name: 'App Created',
-					models: String(modelObj.id)
+					name: formValues.app_name+ ' Model',
+					forms: String(formObj.id)
 				},
 				status: 'publish'
 			})
-			modelPoster.save()
+			modelPoster.save().done((modelObj) => {
+
+				// Make app.
+				let app = new wp.api.models.App({
+					title: formValues.app_name,
+					meta: {
+						app_name: formValues.app_name,
+						models: String(modelObj.id)
+					},
+					status: 'publish'
+				})
+				app.save().done((modelObj) => {
+					f2.triggerRecordsChangedEvent('app')
+				})
+			})
+
 		})
 
 	},

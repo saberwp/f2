@@ -269,8 +269,6 @@ const f2 = {
 			const modelKey = e.target.getAttribute('modelKey')
 			const appFormEl = document.getElementById('f2-app-form-'+modelKey)
 
-
-
 			// Prevent default post submit.
 			e.preventDefault()
 
@@ -478,7 +476,7 @@ const f2 = {
 				el = document.createElement('select')
 				el.className = 'border border-solid border-gray-800 p-2'
 				el.id = fieldElement.key
-				let choiceOptions = '<option value="0">Select Author</option>'
+				let choiceOptions = '<option value="0">Select Choice</option>'
 				if( null !== fieldElement.choices && undefined !== fieldElement.choices && fieldElement.choices.length > 0 ) {
 					fieldElement.choices.forEach((choice) => {
 						choiceOptions += '<option value="' + choice.value + '">' + choice.label + '</option>'

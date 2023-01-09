@@ -124,9 +124,6 @@ const f2 = {
 		})
 		menuContainer.innerHTML = menuHtml
 		const menuItems = menuContainer.querySelectorAll('a')
-
-		console.log(menuItems)
-
 		for (let i = 0; i < menuItems.length; i++) {
 		  const menuItem = menuItems[i]
 			const screen = f2.screens[i]
@@ -170,7 +167,6 @@ const f2 = {
 		}
 
 		const cont = f2.screenEl('f2-app-screen-model-'+model.key)
-		console.log(cont)
 		cont.appendChild(el)
 		f2.modelContainers[model.key] = el
 	},
@@ -240,9 +236,6 @@ const f2 = {
 		})
 		modelPoster.save().done((modelObj) => {
 
-			console.log('model created:')
-			console.log(modelObj)
-
 			// Make app.
 			let modelPoster = new wp.api.models.App({
 				title: 'App',
@@ -285,7 +278,6 @@ const f2 = {
 
 			// Initialize special process for "app" models.
 			if('app' === modelKey) {
-				console.log('modelKey is app...')
 				f2.appCreateProcess(objectId, formValues)
 				return
 			}
@@ -314,34 +306,7 @@ const f2 = {
 			const fetchResult = post.save().done((resp) => {
 				f2.triggerRecordsChangedEvent(model)
 			})
-
-			// Choose endpoint, protocol based on objectId.
-			/*
-			let endpoint = 'http://f2.local/wp-json/wp/v2/'+model.key
-			let protocol = 'POST'
-			if( objectId > 0 ) {
-				endpoint += '/' + objectId
-				protocol = 'PUT'
-			}
-
-			fetch(endpoint, {
-			  method: protocol,
-			  body: JSON.stringify(postData),
-			  headers: {
-					"Content-type": "application/json; charset=UTF-8",
-					'Authorization': "Basic " + btoa('admin' + ':' + 'hcLS qRJv LQxT 1bqa G6Xe OozD'),
-				}
-			})
-			.then(response => response.json())
-			.then(data => {
-				f2.triggerRecordsChangedEvent(model)
-			})
-			.catch(err => console.log(err));
-
-			*/
-
 		})
-
 	},
 
 	fetchRecords(model) {
@@ -395,7 +360,6 @@ const f2 = {
 		// Field headers.
 		f2.modelLookup[modelKey].form.fieldGroups.forEach((field) => {
 			const headerElField = document.createElement('th')
-			console.log(field)
 			headerElField.innerHTML = field.elements[0].text
 			headerElField.className = 'py-3.5 pl-3 pr-3 text-left text-sm font-semibold text-gray-900';
 			tableHeaderRowEl.appendChild(headerElField)
@@ -454,7 +418,6 @@ const f2 = {
 	makeFieldElement(fieldElement) {
 		let el = ''
 		if( 'control' === fieldElement.elementType ) {
-			console.log(fieldElement.type)
 			if( fieldElement.type === 'text_area' ) {
 				el = document.createElement('textarea')
 				el.className = 'border border-solid border-gray-800 p-2'
@@ -485,9 +448,7 @@ const f2 = {
 				el.innerHTML = choiceOptions
 			}
 			if( fieldElement.type === 'text' || fieldElement.type == 'Text Not Set') {
-				console.log('hello hello!!!')
 				el = fieldTypeText.make(fieldElement)
-				console.log(el)
 			}
 		}
 		if( 'label' === fieldElement.elementType ) {

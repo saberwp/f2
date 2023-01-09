@@ -187,6 +187,12 @@ class CoreApp {
 		$control = new Control();
 		$control->setKey('type');
 		$control->setType('select');
+		$control->setChoices(
+			array(
+				'text'   => 'Text',
+				'select' => 'Select',
+			)
+		);
 		$field->addElement($control);
 		$form->addControl($control);
 		$fields[] = $field;

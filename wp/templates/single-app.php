@@ -198,9 +198,7 @@
   </div>
 </div>
 
-
 <?php get_footer(); ?>
-
 
 <?php
 $appObj = new App;
@@ -211,14 +209,7 @@ if( $post->post_name === 'app' ) {
 	$app = $appObj->make($post->ID);
 }
 
-
-
-
 echo '<script>var f2app = ' . json_encode($app) . '</script>';
 ?>
-
-<pre>
-<?php var_dump($app); ?>
-</pre>
 
 <script src='http://f2.local/wp-content/plugins/f2/src/main.js?ver=1672806654' id='f2-main-js'></script>

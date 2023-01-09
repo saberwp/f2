@@ -294,6 +294,7 @@ const f2 = {
 			// Set Backbone POST/PUT vars.
 			let postObject = {
 				meta: formValues,
+				status: 'publish',
 			}
 			if( objectId > 0 ) {
 				postObject.id = objectId

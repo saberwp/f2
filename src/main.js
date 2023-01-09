@@ -416,6 +416,9 @@ const f2 = {
 	},
 
 	makeFieldElement(fieldElement) {
+
+		console.log('makeFieldElement...')
+
 		let el = ''
 		if( 'control' === fieldElement.elementType ) {
 			if( fieldElement.type === 'text_area' ) {
@@ -436,10 +439,12 @@ const f2 = {
 				el.innerHTML = choiceOptions
 			}
 			if( fieldElement.type === 'select' ) {
+
 				el = document.createElement('select')
 				el.className = 'border border-solid border-gray-800 p-2'
 				el.id = fieldElement.key
 				let choiceOptions = '<option value="0">Select Choice</option>'
+
 				if( null !== fieldElement.choices && undefined !== fieldElement.choices && fieldElement.choices.length > 0 ) {
 					fieldElement.choices.forEach((choice) => {
 						choiceOptions += '<option value="' + choice.value + '">' + choice.label + '</option>'

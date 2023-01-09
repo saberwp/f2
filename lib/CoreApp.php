@@ -186,11 +186,21 @@ class CoreApp {
 		$field->addElement( $label );
 		$control = new Control();
 		$control->setKey('type');
+
+		// Make choices.
 		$control->setType('select');
+		$choice1 = new stdClass;
+		$choice1->value = 'text';
+		$choice1->label = 'Text';
+
+		$choice2 = new stdClass;
+		$choice2->value = 'select';
+		$choice2->label = 'Select';
+
 		$control->setChoices(
 			array(
-				'text'   => 'Text',
-				'select' => 'Select',
+				$choice1,
+				$choice2,
 			)
 		);
 		$field->addElement($control);

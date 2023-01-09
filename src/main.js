@@ -257,6 +257,10 @@ const f2 = {
 
 	},
 
+	modelNameFromKey(modelKey) {
+		return modelKey.charAt(0).toUpperCase() + modelKey.slice(1)
+	},
+
 	formProcessor(model) {
 
 		const appFormEl = document.getElementById('f2-app-form-'+model.key)
@@ -297,17 +301,19 @@ const f2 = {
 			  meta: formValues,
 			}
 
-			// New WP Backbone PUT.
+			// Set Backbone POST/PUT vars.
 			let postObject = {
 				meta: formValues,
 			}
 			if( objectId > 0 ) {
 				postObject.id = objectId
 			}
-			let post = new wp.api.models.App(postObject)
+
+			// Get capitalized model name from key.
+			const modelName = f2.modelNameFromKey(modelKey)
+
+			let post = new wp.api.models[modelName](postObject)
 			const fetchResult = post.save().done((resp) => {
-				console.log('App post/fetch/done:')
-				console.log(resp)
 				f2.triggerRecordsChangedEvent(model)
 			})
 

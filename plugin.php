@@ -62,6 +62,8 @@ add_filter('single_template', function( $template, $type, $templates ) {
 
 add_action('wp_enqueue_scripts', function() {
 
+	wp_enqueue_script( 'wp-api' );
+
 	wp_enqueue_style(
 		'saberm-inter',
 		'https://rsms.me/inter/inter.css',

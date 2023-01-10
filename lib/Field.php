@@ -13,9 +13,14 @@ class Field {
 		$this->classes = $classes;
 	}
 
+	public function loadByPost( $postId ) {
+		$field_post = get_post( $postId );
+		$field_meta = get_post_meta( $postId );
+	}
+
 	/* Render the entire field, including all defined elements and control. */
 	public function render() {
-		
+
 
 	}
 

@@ -1,5 +1,7 @@
 <?php
 
+namespace F2;
+
 class CoreApp {
 
 	public function make() {
@@ -189,11 +191,11 @@ class CoreApp {
 
 		// Make choices.
 		$control->setType('select');
-		$choice1 = new stdClass;
+		$choice1 = new \stdClass;
 		$choice1->value = 'text';
 		$choice1->label = 'Text';
 
-		$choice2 = new stdClass;
+		$choice2 = new \stdClass;
 		$choice2->value = 'select';
 		$choice2->label = 'Select';
 

@@ -1,7 +1,10 @@
 <?php
 
+namespace F2;
+
 class Field {
 
+	public $type; // FieldType Object.
 	public $elements = array();
 	public $classes = 'flex flex-col gap-1';
 
@@ -20,6 +23,14 @@ class Field {
 		// Metas: key, label, placeholder, type, choices.
 		$field_meta = get_post_meta( $postId );
 
+		// Parse field type key from meta.
+		$fieldTypeKey = $field_meta['type'][0];
+
+		// Make label.
+		$label = new Label();
+		$label->text = $field_meta['label'][0];
+		$this->addElement($label);
+
 		// Make control.
 		$control = new Control();
 		$control->setKey( $field_meta['key'][0] );
@@ -27,16 +38,17 @@ class Field {
 		$control->setPlaceholder( $field_meta['placeholder'][0] );
 		$this->addElement($control);
 
-		// Make label.
-
 	}
 
 	/* Render the entire field, including all defined elements and control. */
 	public function render() {
 
 		foreach( $this->elements as $element ) {
+			if( $element->elementType === 'label' ) {
+				$element->render();
+			}
 			if( $element->elementType === 'control' ) {
-				echo '<input type="text" placeholder="Placeholder text..." class="' . $element->classes . '" />';
+				$element->render();
 			}
 		}
 

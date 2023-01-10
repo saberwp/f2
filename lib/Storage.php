@@ -1,5 +1,7 @@
 <?php
 
+namespace F2;
+
 class Storage {
 
 	public $name;

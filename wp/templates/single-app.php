@@ -140,7 +140,7 @@
 
     <main class="flex-1">
       <div class="py-6 px-4">
-        <?php App::render($post); ?>
+        <?php \F2\App::render($post); ?>
 				<div id="f2-slideover" class="hidden relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
 				  <!--
 				    Background backdrop, show/hide based on slide-over state.
@@ -201,9 +201,9 @@
 <?php get_footer(); ?>
 
 <?php
-$appObj = new App;
+$appObj = new \F2\App;
 if( $post->post_name === 'app' ) {
-	$coreApp = new CoreApp();
+	$coreApp = new \F2\CoreApp();
 	$app = $coreApp->make();
 } else {
 	$app = $appObj->make($post->ID);

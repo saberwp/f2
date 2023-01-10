@@ -26,7 +26,7 @@ require_once( F2_PATH . '/lib/Model.php' );
 add_action('init', function() {
 
 	require_once( F2_PATH . '/wp/post-types/app.php' );
-	$coreApp = new CoreApp();
+	$coreApp = new \F2\CoreApp();
 	$app = $coreApp->make();
 	$app->storageInit();
 
@@ -36,7 +36,7 @@ add_action('init', function() {
 	));
 
 	if( ! empty( $appPosts )) {
-		$appObj = new App;
+		$appObj = new \F2\App;
 		foreach( $appPosts as $appPost ) {
 			if( $appPost->post_name === 'app' ) {
 				continue;

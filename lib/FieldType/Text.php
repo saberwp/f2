@@ -2,7 +2,7 @@
 
 namespace F2\FieldType;
 
-class Select {
+class Text {
 
 
 

@@ -1,5 +1,7 @@
 <?php
 
+namespace F2;
+
 class Control {
 
 	public $elementType = 'control';
@@ -31,6 +33,10 @@ class Control {
 
 	public function setChoicesByJson( $choicesJson ) {
 		$this->choices = json_decode($choicesJson);
+	}
+
+	public function render() {
+		echo '<input type="text" placeholder="' . $this->placeholder . '" class="' . $this->classes . '" />';
 	}
 
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace F2;
+
 class Label {
 
 	public $elementType = 'label';
@@ -15,9 +17,7 @@ class Label {
 	}
 
 	public function render() {
-
 		echo '<label class="' . $this->classes . '">' . $this->text . '</label>';
-
 	}
 
 }

@@ -1,7 +1,0 @@
-f2FieldTypeSelect = {
-
-	render() {
-		
-	}
-
-}

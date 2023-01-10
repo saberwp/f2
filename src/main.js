@@ -124,6 +124,9 @@ const f2 = {
 		})
 		menuContainer.innerHTML = menuHtml
 		const menuItems = menuContainer.querySelectorAll('a')
+
+		console.log(menuItems)
+
 		for (let i = 0; i < menuItems.length; i++) {
 		  const menuItem = menuItems[i]
 			const screen = f2.screens[i]
@@ -167,6 +170,7 @@ const f2 = {
 		}
 
 		const cont = f2.screenEl('f2-app-screen-model-'+model.key)
+		console.log(cont)
 		cont.appendChild(el)
 		f2.modelContainers[model.key] = el
 	},
@@ -225,47 +229,32 @@ const f2 = {
 
 	appCreateProcess(objectId, formValues) {
 
-		let formPoster = new wp.api.models.Form({
-			title: formValues.app_name+ ' Form',
+		// Make model post because it is an app being saved.
+		let modelPoster = new wp.api.models.Model({
+			title: 'App Default Model',
 			meta: {
-				name: formValues.app_name+ ' Form',
-				fields: '1,2,3'
+				name: 'Model Storage 123',
+				forms: '1,2,3'
 			},
 			status: 'publish'
 		})
-		formPoster.save().done((formObj) => {
+		modelPoster.save().done((modelObj) => {
 
-			// Make model post because it is an app being saved.
-			let modelPoster = new wp.api.models.Model({
-				title: formValues.app_name+ ' Model',
+			console.log('model created:')
+			console.log(modelObj)
+
+			// Make app.
+			let modelPoster = new wp.api.models.App({
+				title: 'App',
 				meta: {
-					name: formValues.app_name+ ' Model',
-					forms: String(formObj.id)
+					app_name: 'App Created',
+					models: String(modelObj.id)
 				},
 				status: 'publish'
 			})
-			modelPoster.save().done((modelObj) => {
-
-				// Make app.
-				let app = new wp.api.models.App({
-					title: formValues.app_name,
-					meta: {
-						app_name: formValues.app_name,
-						models: String(modelObj.id)
-					},
-					status: 'publish'
-				})
-				app.save().done((modelObj) => {
-					f2.triggerRecordsChangedEvent('app')
-				})
-			})
-
+			modelPoster.save()
 		})
 
-	},
-
-	modelNameFromKey(modelKey) {
-		return modelKey.charAt(0).toUpperCase() + modelKey.slice(1)
 	},
 
 	formProcessor(model) {
@@ -275,6 +264,8 @@ const f2 = {
 
 			const modelKey = e.target.getAttribute('modelKey')
 			const appFormEl = document.getElementById('f2-app-form-'+modelKey)
+
+
 
 			// Prevent default post submit.
 			e.preventDefault()
@@ -292,6 +283,7 @@ const f2 = {
 
 			// Initialize special process for "app" models.
 			if('app' === modelKey) {
+				console.log('modelKey is app...')
 				f2.appCreateProcess(objectId, formValues)
 				return
 			}
@@ -305,27 +297,51 @@ const f2 = {
 			  meta: formValues,
 			}
 
-			// Set Backbone POST/PUT vars.
+			// New WP Backbone PUT.
 			let postObject = {
 				meta: formValues,
-				status: 'publish',
 			}
 			if( objectId > 0 ) {
 				postObject.id = objectId
 			}
-
-			// Get capitalized model name from key.
-			const modelName = f2.modelNameFromKey(modelKey)
-
-			let post = new wp.api.models[modelName](postObject)
+			let post = new wp.api.models.App(postObject)
 			const fetchResult = post.save().done((resp) => {
+				console.log('App post/fetch/done:')
+				console.log(resp)
 				f2.triggerRecordsChangedEvent(model)
 			})
+
+			// Choose endpoint, protocol based on objectId.
+			/*
+			let endpoint = 'http://f2.local/wp-json/wp/v2/'+model.key
+			let protocol = 'POST'
+			if( objectId > 0 ) {
+				endpoint += '/' + objectId
+				protocol = 'PUT'
+			}
+
+			fetch(endpoint, {
+			  method: protocol,
+			  body: JSON.stringify(postData),
+			  headers: {
+					"Content-type": "application/json; charset=UTF-8",
+					'Authorization': "Basic " + btoa('admin' + ':' + 'hcLS qRJv LQxT 1bqa G6Xe OozD'),
+				}
+			})
+			.then(response => response.json())
+			.then(data => {
+				f2.triggerRecordsChangedEvent(model)
+			})
+			.catch(err => console.log(err));
+
+			*/
+
 		})
+
 	},
 
 	fetchRecords(model) {
-		let endpoint = 'http://f2.local/wp-json/wp/v2/' + model.key
+		let endpoint = 'http://localhost/saberwp/wp-json/wp/v2/' + model.key
 		let protocol = 'GET'
 		fetch(endpoint, {
 			method: protocol,
@@ -375,6 +391,7 @@ const f2 = {
 		// Field headers.
 		f2.modelLookup[modelKey].form.fieldGroups.forEach((field) => {
 			const headerElField = document.createElement('th')
+			console.log(field)
 			headerElField.innerHTML = field.elements[0].text
 			headerElField.className = 'py-3.5 pl-3 pr-3 text-left text-sm font-semibold text-gray-900';
 			tableHeaderRowEl.appendChild(headerElField)
@@ -431,11 +448,9 @@ const f2 = {
 	},
 
 	makeFieldElement(fieldElement) {
-
-		console.log('makeFieldElement...')
-
 		let el = ''
 		if( 'control' === fieldElement.elementType ) {
+			console.log(fieldElement.type)
 			if( fieldElement.type === 'text_area' ) {
 				el = document.createElement('textarea')
 				el.className = 'border border-solid border-gray-800 p-2'
@@ -454,12 +469,10 @@ const f2 = {
 				el.innerHTML = choiceOptions
 			}
 			if( fieldElement.type === 'select' ) {
-
 				el = document.createElement('select')
 				el.className = 'border border-solid border-gray-800 p-2'
 				el.id = fieldElement.key
-				let choiceOptions = '<option value="0">Select Choice</option>'
-
+				let choiceOptions = '<option value="0">Select Author</option>'
 				if( null !== fieldElement.choices && undefined !== fieldElement.choices && fieldElement.choices.length > 0 ) {
 					fieldElement.choices.forEach((choice) => {
 						choiceOptions += '<option value="' + choice.value + '">' + choice.label + '</option>'
@@ -468,7 +481,9 @@ const f2 = {
 				el.innerHTML = choiceOptions
 			}
 			if( fieldElement.type === 'text' || fieldElement.type == 'Text Not Set') {
+				console.log('hello hello!!!')
 				el = fieldTypeText.make(fieldElement)
+				console.log(el)
 			}
 		}
 		if( 'label' === fieldElement.elementType ) {
@@ -523,28 +538,93 @@ const f2 = {
 		f2.slideoverOpen()
 
 	},
-
 	deleteClick( btn ) {
 
 		const modelKey = btn.getAttribute('model-key')
 		const objectId = btn.getAttribute('object-id')
-
-		/* DELETE request. */
-		fetch( 'http://f2.local/wp-json/wp/v2/' + modelKey + '/' + objectId + '?force=true', {
-			method:'DELETE',
-      credentials: 'include',
-			headers: {
-			  'Content-Type': 'application/json',
-				'Authorization': "Basic " + btoa('admin' + ':' + 'hcLS qRJv LQxT 1bqa G6Xe OozD'),
-			},
-		})
-		.then(response => response.json())
-		.then(json => {
-			f2.triggerRecordsChangedEvent(f2.modelLookup[modelKey])
-		})
-		.catch(err => console.log(err));
+		if('app' == modelKey ){
+			let deleteObj = new wp.api.models.App({
+				id:objectId
+			})
+			/* DELETE request. */
+			deleteObj.destroy().done( (resObj)=>{
+				 
+				if( resObj.deleted ){
+					f2.triggerRecordsChangedEvent(f2.modelLookup[modelKey])	
+				}
+			})
+		}else if('model' == modelKey ){
+			let deleteObj = new wp.api.models.Model({
+				id:objectId
+			})
+			/* DELETE request. */
+			deleteObj.destroy().done( (resObj)=>{
+				if( resObj.deleted ){
+					f2.triggerRecordsChangedEvent(f2.modelLookup[modelKey])	
+				}
+				
+			})
+		}else if('form' == modelKey ){
+			let deleteObj = new wp.api.models.Form({
+				id:objectId
+			})
+			/* DELETE request. */
+			deleteObj.destroy().done( (resObj)=>{
+				if( resObj.deleted ){
+					f2.triggerRecordsChangedEvent(f2.modelLookup[modelKey])	
+				}
+				
+			})
+		}else if('field' == modelKey ){
+			let deleteObj = new wp.api.models.Field({
+				id:objectId
+			})
+			/* DELETE request. */
+			deleteObj.destroy().done( (resObj)=>{
+				if( resObj.deleted ){
+					f2.triggerRecordsChangedEvent(f2.modelLookup[modelKey])	
+				}
+				
+			})
+		}
+		
+	// 	fetch( 'http://localhost/saberwp/wp-json/wp/v2/' + modelKey + '/' + objectId + '?force=true', {
+	// 		method:'DELETE',
+      // credentials: 'include',
+	// 		headers: {
+	// 		  'Content-Type': 'application/json',
+	// 			'Authorization': "Basic " + btoa('admin' + ':' + 'hcLS qRJv LQxT 1bqa G6Xe OozD'),
+	// 		},
+	// 	})
+	// 	.then(response => response.json())
+	// 	.then(json => {
+	// 		f2.triggerRecordsChangedEvent(f2.modelLookup[modelKey])
+	// 	})
+	// 	.catch(err => console.log(err));
 
 	},
+
+	// deleteClick( btn ) {
+
+	// 	const modelKey = btn.getAttribute('model-key')
+	// 	const objectId = btn.getAttribute('object-id')
+
+	// 	/* DELETE request. */
+	// 	fetch( 'http://localhost/saberwp/wp-json/wp/v2/' + modelKey + '/' + objectId + '?force=true', {
+	// 		method:'DELETE',
+    //   credentials: 'include',
+	// 		headers: {
+	// 		  'Content-Type': 'application/json',
+	// 			'Authorization': "Basic " + btoa('admin' + ':' + 'hcLS qRJv LQxT 1bqa G6Xe OozD'),
+	// 		},
+	// 	})
+	// 	.then(response => response.json())
+	// 	.then(json => {
+	// 		f2.triggerRecordsChangedEvent(f2.modelLookup[modelKey])
+	// 	})
+	// 	.catch(err => console.log(err));
+
+	// },
 
 	triggerRecordsChangedEvent(model) {
 		const event = new CustomEvent('f2_records_changed', {

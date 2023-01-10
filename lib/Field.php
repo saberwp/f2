@@ -13,4 +13,10 @@ class Field {
 		$this->classes = $classes;
 	}
 
+	/* Render the entire field, including all defined elements and control. */
+	public function render() {
+		
+
+	}
+
 }

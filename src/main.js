@@ -529,20 +529,19 @@ const f2 = {
 		const modelKey = btn.getAttribute('model-key')
 		const objectId = btn.getAttribute('object-id')
 
-		/* DELETE request. */
-		fetch( 'http://f2.local/wp-json/wp/v2/' + modelKey + '/' + objectId + '?force=true', {
-			method:'DELETE',
-      credentials: 'include',
-			headers: {
-			  'Content-Type': 'application/json',
-				'Authorization': "Basic " + btoa('admin' + ':' + 'hcLS qRJv LQxT 1bqa G6Xe OozD'),
-			},
+		// Get capitalized model name from key.
+		const modelName = f2.modelNameFromKey(modelKey)
+
+		const postObject = {
+			id: objectId
+		}
+
+		let post = new wp.api.models[modelName](postObject)
+		const fetchResult = post.destroy().done((resp) => {
+			const model = f2.modelLookup[modelKey]
+			f2.triggerRecordsChangedEvent(model)
 		})
-		.then(response => response.json())
-		.then(json => {
-			f2.triggerRecordsChangedEvent(f2.modelLookup[modelKey])
-		})
-		.catch(err => console.log(err));
+
 
 	},
 

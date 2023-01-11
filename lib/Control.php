@@ -41,10 +41,10 @@ class Control {
 				echo '<input type="text" placeholder="' . $this->placeholder . '" class="' . $this->classes . '" />';
 				break;
 			case 'select':
-			echo '<select id="' . $this->key . '">';
-				foreach($this->choices as $choice) {
-					echo '<option value="' . $choice . '">' . $choice . '</option>';
-				}
+				echo '<select id="' . $this->key . '">';
+					foreach($this->choices as $choice) {
+						echo '<option value="' . $choice . '">' . $choice . '</option>';
+					}
 				echo '</select>';
 				break;
 		}

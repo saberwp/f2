@@ -49,9 +49,28 @@ class Field {
 
 		$control->setPlaceholder( $field_meta['placeholder'][0] );
 
-		// Control choices.
-		$choices = explode(',',$field_meta['choices'][0]);
-		$control->setChoices($choices);
+		// Control choices manual set.
+		if( 'select' === $this->typeKey ) {
+			$choices = explode(',',$field_meta['choices'][0]);
+			$control->setChoices($choices);
+		}
+
+		// Control choices for post select.
+		if( 'post_select' === $this->typeKey ) {
+			$choices = array();
+			$posts = get_posts(
+				array(
+					'post_type'   => 'post',
+					'numberposts' => -1
+				),
+			);
+			if( ! empty( $posts )) {
+				foreach( $posts as $post ) {
+					$choices[$post->ID] = $post->post_title;
+				}
+			}
+			$control->setChoices($choices);
+		}
 
 		$this->addElement($control);
 

@@ -22,6 +22,12 @@ require_once( F2_PATH . '/lib/Schema.php' );
 require_once( F2_PATH . '/lib/Fetch.php' );
 require_once( F2_PATH . '/lib/Model.php' );
 
+// Field Types.
+require_once( F2_PATH . '/lib/FieldType/Text.php' );
+require_once( F2_PATH . '/lib/FieldType/Select.php' );
+require_once( F2_PATH . '/lib/FieldType/Button.php' );
+require_once( F2_PATH . '/lib/FieldType/PostSelect.php' );
+
 // Register app post types.
 add_action('init', function() {
 

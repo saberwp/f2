@@ -2,13 +2,10 @@
 
 namespace F2\FieldType;
 
-class Text {
+class Button {
 
 	public function render() {
-
-		
-
+		echo '<button type="submit">GO</button>';
 	}
-
 
 }

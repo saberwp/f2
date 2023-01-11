@@ -199,10 +199,20 @@ class CoreApp {
 		$choice2->value = 'select';
 		$choice2->label = 'Select';
 
+		$choice3 = new \stdClass;
+		$choice3->value = 'button';
+		$choice3->label = 'Button';
+
+		$choice4 = new \stdClass;
+		$choice4->value = 'post_select';
+		$choice4->label = 'Post Select';
+
 		$control->setChoices(
 			array(
 				$choice1,
 				$choice2,
+				$choice3,
+				$choice4,
 			)
 		);
 		$field->addElement($control);

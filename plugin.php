@@ -66,6 +66,25 @@ add_filter('single_template', function( $template, $type, $templates ) {
 
 }, 10, 3);
 
+// Provide docs template.
+add_filter('page_template', function( $template, $type, $templates ) {
+
+	// Target only F2 apps.
+	global $post;
+	if( 91 !== $post->ID && 95 !== $post->ID ) {
+		return $template;
+	}
+
+	if( 91 === $post->ID ) {
+		return F2_PATH . '/wp/templates/page-docs.php';
+	}
+
+	if( 95 === $post->ID ) {
+		return F2_PATH . '/wp/templates/page-builder.php';
+	}
+
+}, 10, 3);
+
 add_action('wp_enqueue_scripts', function() {
 
 	wp_enqueue_script( 'wp-api' );

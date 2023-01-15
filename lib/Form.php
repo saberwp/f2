@@ -4,30 +4,50 @@ namespace F2;
 
 class Form {
 
-	public $storage = null;
-	public $fieldGroups = array(); // Used for rendering fields and labels.
+	public $key = '';
 	public $fields = array(); // Only the data fields.
 	public $data = array();
-
-	public function setStorage( $storage ) {
-		$this->storage = $storage;
-	}
 
 	public function setData( $data ) {
 		$this->data = $data;
 	}
 
-	// @TODO delete in favor of addControl when no longer used.
 	public function addField( $field ) {
 		$this->fields[] = $field;
 	}
 
-	public function addControl( $control ) {
-		$this->fields[] = $control;
+	public function setFields( $fields ) {
+		$this->fields = $fields;
 	}
 
-	public function setFields( $fieldGroups ) {
-		$this->fieldGroups = $fieldGroups;
+	public function loadByPost( $postId ) {
+
+		$field_post = get_post( $postId );
+		$field_meta = get_post_meta( $postId );
+		$this->key = $field_meta['key'][0];
+
+		// Set fields from meta.
+		$fieldList = $field_meta['fields'][0];
+		$this->fields = explode(',',$fieldList);
+
+	}
+
+	public function render() {
+
+		echo '<pre>';
+		var_dump( $this );
+		echo '</pre>';
+
+
+		// Render form fields.
+		if( ! empty( $this->fields ) ) {
+			foreach( $this->fields as $fieldId ) {
+				$field = new Field();
+				$field->loadByPost($fieldId);
+				$field->render();
+			}
+		}
+
 	}
 
 }

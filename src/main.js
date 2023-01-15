@@ -58,6 +58,10 @@ const f2 = {
 				collection: [],
 				lookup: {}
 			}
+
+			console.log('before fetchRecords')
+			console.log(model)
+
 			f2.fetchRecords(model)
 		})
 
@@ -186,8 +190,8 @@ const f2 = {
 		formEl.appendChild(objectIdEl)
 
 		// Render field groups.
-		model.form.fieldGroups.forEach((fieldGroup, index) => {
-			f2.renderField(fieldGroup, formEl)
+		model.form.fields.forEach((field, index) => {
+			f2.renderField(field, formEl)
 		})
 
 		// Add save button.
@@ -373,7 +377,7 @@ const f2 = {
 		tableHeaderRowEl.appendChild(headerElId)
 
 		// Field headers.
-		f2.modelLookup[modelKey].form.fieldGroups.forEach((field) => {
+		f2.modelLookup[modelKey].form.fields.forEach((field) => {
 			const headerElField = document.createElement('th')
 			headerElField.innerHTML = field.elements[0].text
 			headerElField.className = 'py-3.5 pl-3 pr-3 text-left text-sm font-semibold text-gray-900';
@@ -391,6 +395,11 @@ const f2 = {
 
 		// Set create button text.
 		const createButton = tableEl.querySelector('.f2-create-button')
+
+		console.log('creating button:')
+		console.log(modelKey)
+		console.log(f2.modelLookup)
+
 		createButton.innerHTML = 'Create '+f2.modelLookup[modelKey].storage.singleName
 		createButton.setAttribute('modelKey',modelKey)
 		createButton.addEventListener('click', f2.createClick)

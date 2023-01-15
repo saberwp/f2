@@ -38,8 +38,7 @@ class CoreApp {
 		$control->setType('text');
 		$control->setPlaceholder('App name...');
 		$field->addElement($control);
-		$form->addControl($control);
-		$fields[] = $field;
+		$form->addField($control);
 
 		// Field: models.
 		$field = new Field();
@@ -51,10 +50,8 @@ class CoreApp {
 		$control->setType('text');
 		$control->setPlaceholder('Models...');
 		$field->addElement($control);
-		$form->addControl($control);
-		$fields[] = $field;
+		$form->addField($control);
 
-		$form->setFields($fields);
 		$model->setForm($form);
 		$app->addModel( $model );
 		return $app;
@@ -80,7 +77,7 @@ class CoreApp {
 		$control->setType('text');
 		$control->setPlaceholder('Model key...');
 		$field->addElement($control);
-		$form->addControl($control);
+		$form->addField($control);
 		$fields[] = $field;
 
 		// Field: name.
@@ -93,7 +90,7 @@ class CoreApp {
 		$control->setType('text');
 		$control->setPlaceholder('Model name...');
 		$field->addElement($control);
-		$form->addControl($control);
+		$form->addField($control);
 		$fields[] = $field;
 
 		// Field: singleName.
@@ -106,7 +103,7 @@ class CoreApp {
 		$control->setType('text');
 		$control->setPlaceholder('Model single name...');
 		$field->addElement($control);
-		$form->addControl($control);
+		$form->addField($control);
 		$fields[] = $field;
 
 		// Field: forms.
@@ -119,10 +116,8 @@ class CoreApp {
 		$control->setType('text');
 		$control->setPlaceholder('Forms...');
 		$field->addElement($control);
-		$form->addControl($control);
-		$fields[] = $field;
+		$form->addField($control);
 
-		$form->setFields($fields);
 		$model->setForm($form);
 		$app->addModel($model);
 		return $app;
@@ -148,8 +143,7 @@ class CoreApp {
 		$control->setType('text');
 		$control->setPlaceholder('Form key...');
 		$field->addElement($control);
-		$form->addControl($control);
-		$fields[] = $field;
+		$form->addField($control);
 
 		// Field: fields.
 		$field = new Field();
@@ -161,10 +155,8 @@ class CoreApp {
 		$control->setType('text');
 		$control->setPlaceholder('Fields...');
 		$field->addElement($control);
-		$form->addControl($control);
-		$fields[] = $field;
+		$form->addField($control);
 
-		$form->setFields($fields);
 		$model->setForm($form);
 		$app->addModel($model);
 		return $app;
@@ -216,7 +208,7 @@ class CoreApp {
 			)
 		);
 		$field->addElement($control);
-		$form->addControl($control);
+		$form->addField($control);
 		$fields[] = $field;
 
 		// Field: key
@@ -229,7 +221,7 @@ class CoreApp {
 		$control->setType('text');
 		$control->setPlaceholder('Field key...');
 		$field->addElement($control);
-		$form->addControl($control);
+		$form->addField($control);
 		$fields[] = $field;
 
 		// Field: label
@@ -242,7 +234,7 @@ class CoreApp {
 		$control->setType('text');
 		$control->setPlaceholder('Label...');
 		$field->addElement($control);
-		$form->addControl($control);
+		$form->addField($control);
 		$fields[] = $field;
 
 		// Field: placeholder
@@ -255,7 +247,7 @@ class CoreApp {
 		$control->setType('text');
 		$control->setPlaceholder('Placeholder...');
 		$field->addElement($control);
-		$form->addControl($control);
+		$form->addField($control);
 		$fields[] = $field;
 
 		// Field: choices.
@@ -268,10 +260,8 @@ class CoreApp {
 		$control->setType('text');
 		$control->setPlaceholder('Choices...');
 		$field->addElement($control);
-		$form->addControl($control);
-		$fields[] = $field;
+		$form->addField($control);
 
-		$form->setFields($fields);
 		$model->setForm($form);
 		$app->addModel($model);
 		return $app;

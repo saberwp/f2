@@ -39,7 +39,7 @@ class App {
 			    'type'           => 'string',
 				  'single'         => true,
 			    'show_in_rest'   => true,
-					'default'        => 'Text Not Set',
+					'default'        => '',
 				));
 			}
 		}
@@ -110,6 +110,7 @@ class App {
 					$fieldPlaceholder = get_post_meta($fieldPost->ID, 'placeholder', 1);
 					$fieldChoices = get_post_meta($fieldPost->ID, 'choices', 1);
 					$field = new Field();
+					$field->key = $fieldKey;
 					$field->setClasses('flex flex-col gap-1');
 					$label = new Label();
 					$label->setText($fieldLabel);
@@ -143,14 +144,8 @@ class App {
 					}
 
 					$field->addElement($control);
-					$form->addControl($control);
-					$fields[] = $field;
+					$form->addField($field);
 				}
-			}
-
-			// Add fields to form.
-			if( ! empty( $fields ) ) {
-				$form->setFields($fields);
 			}
 
 			// Add form to model.

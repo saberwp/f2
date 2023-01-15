@@ -27,9 +27,11 @@ class CoreApp {
 		$model->setStorage($storage);
 
 		$form = new Form();
+		$form->setKey('app_form');
 
 		// Field: app_name
 		$field = new Field();
+		$field->setKey('app_name');
 		$label = new Label();
 		$label->setText('App Name');
 		$field->addElement( $label );
@@ -42,6 +44,7 @@ class CoreApp {
 
 		// Field: models.
 		$field = new Field();
+		$field->setKey('models');
 		$label = new Label();
 		$label->setText('Models');
 		$field->addElement( $label );

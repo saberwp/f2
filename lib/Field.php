@@ -4,11 +4,15 @@ namespace F2;
 
 class Field {
 
-	public $key; 
+	public $key;
 	public $type; // FieldType Object.
 	public $typeKey; // FieldType key only (select | text | ...).
 	public $elements = array();
 	public $classes = 'flex flex-col gap-1';
+
+	public function setKey( $key ) {
+		$this->key = $key;
+	}
 
 	public function addElement( $element ) {
 		$this->elements[] = $element;

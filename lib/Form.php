@@ -8,6 +8,10 @@ class Form {
 	public $fields = array(); // Only the data fields.
 	public $data = array();
 
+	public function setKey( $key ) {
+		$this->key = $key;
+	}
+
 	public function setData( $data ) {
 		$this->data = $data;
 	}

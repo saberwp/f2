@@ -21,7 +21,7 @@ class App {
 					'label'  => $model->storage->name,
 					'labels' => array(
 						'name'          => $model->storage->name,
-						'singular_name' => $model->storage->singleName,
+						'singular_name' => $model->storage->single_name,
 					),
 					'public' => true,
 					'show_in_rest' => true,
@@ -75,7 +75,7 @@ class App {
 			$appModelPost = get_post($appModelPostId);
 			$modelKey = get_post_meta($appModelPost->ID, 'key', 1);
 			$modelName = get_post_meta($appModelPost->ID, 'name', 1);
-			$modelSingleName = get_post_meta($appModelPost->ID, 'singleName', 1);
+			$modelSingleName = get_post_meta($appModelPost->ID, 'single_name', 1);
 			$modelForms = get_post_meta($appModelPost->ID, 'forms', 1);
 
 			// Setup app object and storage.

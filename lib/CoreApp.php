@@ -93,13 +93,13 @@ class CoreApp {
 		$form->addField($control);
 		$fields[] = $field;
 
-		// Field: singleName.
+		// Field: single_name.
 		$field = new Field();
 		$label = new Label();
 		$label->setText('Single Name');
 		$field->addElement( $label );
 		$control = new Control();
-		$control->setKey('singleName');
+		$control->setKey('single_name');
 		$control->setType('text');
 		$control->setPlaceholder('Model single name...');
 		$field->addElement($control);

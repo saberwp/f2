@@ -11,7 +11,6 @@ The most simplistic form of app creation involves this short series of steps.
 5. Storage for the App is setup using a Storage object which is added to the app with setStorage( $storage ) method.
 6. App::storageInit() is called and this triggers the registration of post type(s) and meta fields(s) with REST support.
 
-
 ## Internal WordPress Post Types
 
 F2 registers 3 custom post types: app, form and entry.
@@ -106,3 +105,15 @@ Choices objects provide a list of options for a choice type field including sele
 Example of choices in JSON:
 
 	[{"value":1,"label":"Author 1"},{"value":2,"label":"Author 2"}]
+
+	# Schemas
+
+	## Model Schema
+
+	key - Unique identifier.
+	name - Name of the model.
+
+	## Field Schema
+
+	key (required) 
+	type (required)

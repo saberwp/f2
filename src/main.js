@@ -400,7 +400,7 @@ const f2 = {
 		console.log(modelKey)
 		console.log(f2.modelLookup)
 
-		createButton.innerHTML = 'Create '+f2.modelLookup[modelKey].storage.singleName
+		createButton.innerHTML = 'Create '+f2.modelLookup[modelKey].storage.single_name
 		createButton.setAttribute('modelKey',modelKey)
 		createButton.addEventListener('click', f2.createClick)
 
@@ -497,7 +497,7 @@ const f2 = {
 
 		// Add form to slideover.
 		f2.appFormCreate(model)
-		f2.slideoverSetTitle("Edit "+model.storage.singleName)
+		f2.slideoverSetTitle("Edit "+model.storage.single_name)
 		f2.formProcessor(model)
 
 		// Open slideover.
@@ -525,7 +525,7 @@ const f2 = {
 
 		// Add form to slideover.
 		f2.appFormCreate(model)
-		f2.slideoverSetTitle("Create "+model.storage.singleName)
+		f2.slideoverSetTitle("Create "+model.storage.single_name)
 		f2.formProcessor(model)
 
 		// Open slideover.

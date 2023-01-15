@@ -108,12 +108,22 @@ Example of choices in JSON:
 
 	# Schemas
 
+	## App Schema
+
+	models array of model objects.
+
 	## Model Schema
 
 	key - Unique identifier.
 	name - Name of the model.
 
+	## Form Schema
+
+	key - Unique identifier.
+	fields - array of field objects.
+
 	## Field Schema
 
-	key (required) 
-	type (required)
+	key (required)
+	type a field type object.
+	typeKey - single unique identifier string for the type

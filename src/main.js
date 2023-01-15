@@ -321,6 +321,10 @@ const f2 = {
 			// Get capitalized model name from key.
 			const modelName = f2.modelNameFromKey(modelKey)
 
+			console.log(wp.api.models)
+			console.log(modelName)
+			console.log(postObject)
+
 			let post = new wp.api.models[modelName](postObject)
 			const fetchResult = post.save().done((resp) => {
 				f2.triggerRecordsChangedEvent(model)
@@ -340,9 +344,14 @@ const f2 = {
 		})
 		.then(response => response.json())
 		.then(records => {
+
+			console.log('fetch records, then:')
+			console.log( f2.records )
+
 			f2.records[model.key].collection = records
 			f2.recordLookup(model.key)
 			f2.renderRecords(model.key)
+
 		})
 		.catch(err => console.log(err));
 	},
@@ -355,6 +364,8 @@ const f2 = {
 	},
 
 	renderRecords(modelKey) {
+
+		console.log('renderRecords...')
 
 		// Get template and insert into DOM with ID set.
 		const tableEl = document.createElement('div')
@@ -376,13 +387,24 @@ const f2 = {
 		headerElId.className = 'py-3.5 pl-3 pr-3 text-left text-sm font-semibold text-gray-900';
 		tableHeaderRowEl.appendChild(headerElId)
 
+		console.log('before field headers...')
+
 		// Field headers.
+
+		// This should be a loop over "Fields" that contain "Elements", but it is not!
+		// Core app seems to be a loop over "Controls" under form.fields[].
+		// @TODO address inconsistencies in field/element structure under forms (in CoreApp).
+
 		f2.modelLookup[modelKey].form.fields.forEach((field) => {
+
 			const headerElField = document.createElement('th')
-			headerElField.innerHTML = field.elements[0].text
+			headerElField.innerHTML = field.key
 			headerElField.className = 'py-3.5 pl-3 pr-3 text-left text-sm font-semibold text-gray-900';
 			tableHeaderRowEl.appendChild(headerElField)
+
 		})
+
+		console.log('before table header controls...')
 
 		// Table header controls.
 		const headerElControls = document.createElement('th')

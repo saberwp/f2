@@ -13,7 +13,9 @@ class App {
 
 	public function storageInit() {
 		if( empty( $this->models ) ) { return; }
+
 		foreach( $this->models as $model ) {
+
 			// Register post type.
 			$result = register_post_type(
 				$model->key,
@@ -41,6 +43,7 @@ class App {
 			    'show_in_rest'   => true,
 					'default'        => '',
 				));
+
 			}
 		}
 	}
@@ -91,6 +94,7 @@ class App {
 			$formFields = get_post_meta($formPost->ID, 'fields', 1);
 			$formFields = explode(',', $formFields); // Parse the comma-seperated list of fields (1,2,3).
 			$form = new Form();
+			$form->key = get_post_meta($formPost->ID, 'key', 1);
 
 			// Make fields.
 			$fields = [];

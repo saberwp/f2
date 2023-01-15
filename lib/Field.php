@@ -4,6 +4,7 @@ namespace F2;
 
 class Field {
 
+	public $key; 
 	public $type; // FieldType Object.
 	public $typeKey; // FieldType key only (select | text | ...).
 	public $elements = array();

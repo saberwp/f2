@@ -1,4 +1,8 @@
-<?php get_header(); ?>
+<?php
+
+use Michelf\MarkdownExtra;
+
+get_header(); ?>
 
 <div class="flex flex-col gap-4">
 	<h1 class="text-bold text-2xl">F2 Docs</h1>
@@ -42,5 +46,21 @@
 	</div>
 
 </div>
+
+<?php
+
+require_once( F2_PATH . '/vendor/autoload.php' );
+
+// Load with object buffering and then run through MarkdownExtra parser.
+ob_start();
+require_once( F2_PATH . '/docs.md' );
+$md = ob_get_contents();
+ob_end_clean();
+
+$parser = new MarkdownExtra;
+$html = $parser->transform( $md );
+echo $html;
+
+?>
 
 <?php get_footer(); ?>

@@ -213,3 +213,4 @@ echo '<script>var f2app = ' . json_encode($app) . '</script>';
 ?>
 
 <script src='http://f2.local/wp-content/plugins/f2/src/main.js?ver=1672806654' id='f2-main-js'></script>
+<script src='http://f2.local/wp-content/plugins/f2/src/f2.data.js?ver=1672806654' id='f2-data-js'></script>

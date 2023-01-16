@@ -187,6 +187,10 @@ const f2 = {
 
 		// Render field groups.
 		model.form.fields.forEach((field, index) => {
+
+			console.log('before renderField')
+			console.log(field)
+
 			f2.renderField(field, formEl)
 		})
 
@@ -316,6 +320,10 @@ const f2 = {
 
 			// Get capitalized model name from key.
 			const modelName = f2.modelNameFromKey(modelKey)
+
+			console.log('wp.api.models:')
+			console.log(wp.api.models)
+			console.log(modelName)
 
 			let post = new wp.api.models[modelName](postObject)
 			const fetchResult = post.save().done((resp) => {

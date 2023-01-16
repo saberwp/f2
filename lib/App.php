@@ -114,7 +114,8 @@ class App {
 					$fieldPlaceholder = get_post_meta($fieldPost->ID, 'placeholder', 1);
 					$fieldChoices = get_post_meta($fieldPost->ID, 'choices', 1);
 					$field = new Field();
-					$field->key = $fieldKey;
+					$field->setKey($fieldKey);
+					$field->setType($fieldType);
 					$field->setClasses('flex flex-col gap-1');
 					$label = new Label();
 					$label->setText($fieldLabel);

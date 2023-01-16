@@ -4,6 +4,8 @@ namespace F2\FieldType;
 
 class Select {
 
+	public $key = 'select';
+
 	public function renderControl($control) {
 
 		echo '<select id="' . $control->key . '">';

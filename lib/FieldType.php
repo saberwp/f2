@@ -6,6 +6,9 @@ class FieldType {
 
 	// $key - text | select...
 	public static function getFieldTypeClass( $key ) {
+
+		return new FieldType\Text();
+
 		switch( $key ) {
 			case 'select':
 				return new FieldType\Select();

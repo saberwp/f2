@@ -14,6 +14,11 @@ class Field {
 		$this->key = $key;
 	}
 
+	public function setType( $typeKey ) {
+		$this->typeKey = $typeKey;
+		$this->type = FieldType::getFieldTypeClass( $typeKey );
+	}
+
 	public function addElement( $element ) {
 		$this->elements[] = $element;
 	}

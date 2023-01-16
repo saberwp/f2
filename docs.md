@@ -106,24 +106,48 @@ Example of choices in JSON:
 
 	[{"value":1,"label":"Author 1"},{"value":2,"label":"Author 2"}]
 
-	# Schemas
+# Schemas
 
-	## App Schema
+## App Schema
 
-	models array of model objects.
+models array of model objects.
 
-	## Model Schema
+## Model Schema
 
-	key - Unique identifier.
-	name - Name of the model.
+key - Unique identifier.
+name - Name of the model.
 
-	## Form Schema
+## Form Schema
 
-	key - Unique identifier.
-	fields - array of field objects.
+key - Unique identifier.
+fields - array of field objects.
 
-	## Field Schema
+## Field Schema
 
-	key (required)
-	type a field type object.
-	typeKey - single unique identifier string for the type
+key (required)
+type a field type object.
+typeKey - single unique identifier string for the type
+
+# Javascript Function Reference
+
+## f2.init()
+
+Get the appEl node. Stash this into f2.appEl. If that node does not exist, exit because there is no F2 app loaded.
+Set the app ID from the app element.
+
+Loop over the model data contained in f2app.models. f2app models is the JSON representation of the entire app structure.
+
+ Setup app screens. f2.screensInit(), f2.screensMake(). Show the screen dashboard by default with "screen" object function call.
+
+ Loop over the models and do a setup routine for each one.
+
+ 1. f2.modelContainerCreate()
+ 2. f2.modelRender(model)
+ 3. f2.makeCollectionContainer(model)
+ 4. f2.recordsChangeHandler(model)
+
+ ## f2.renderField()
+
+ # Known Issues
+
+ After a new Post Type is registered from an F2 app model, the permalinks need to be flushed otherwise certain features of the post type may not work. This may be why at times wp.api.models does not include the new post type model.

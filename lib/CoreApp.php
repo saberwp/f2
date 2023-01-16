@@ -31,8 +31,8 @@ class CoreApp {
 
 		// Field: app_name
 		$field = new Field();
-		$field->setType('text');
 		$field->setKey('app_name');
+		$field->setType('text');
 		$label = new Label();
 		$label->setText('App Name');
 		$field->addElement( $label );
@@ -45,8 +45,8 @@ class CoreApp {
 
 		// Field: models.
 		$field = new Field();
-		$field->setType('text');
 		$field->setKey('models');
+		$field->setType('text');
 		$label = new Label();
 		$label->setText('Models');
 		$field->addElement( $label );
@@ -74,6 +74,7 @@ class CoreApp {
 
 		// Field: key
 		$field = new Field();
+		$field->setKey('key');
 		$field->setType('text');
 		$label = new Label();
 		$label->setText('Key');
@@ -88,6 +89,7 @@ class CoreApp {
 
 		// Field: name.
 		$field = new Field();
+		$field->setKey('name');
 		$field->setType('text');
 		$label = new Label();
 		$label->setText('Name');
@@ -102,6 +104,7 @@ class CoreApp {
 
 		// Field: single_name.
 		$field = new Field();
+		$field->setKey('single_name');
 		$field->setType('text');
 		$label = new Label();
 		$label->setText('Single Name');
@@ -116,6 +119,7 @@ class CoreApp {
 
 		// Field: forms.
 		$field = new Field();
+		$field->setKey('forms');
 		$field->setType('text');
 		$label = new Label();
 		$label->setText('Forms');
@@ -141,9 +145,11 @@ class CoreApp {
 		$model->setStorage($storage);
 
 		$form = new Form();
+		$form->setKey('form_form');
 
 		// Field: key
 		$field = new Field();
+		$field->setKey('key');
 		$field->setType('text');
 		$label = new Label();
 		$label->setText('Key');
@@ -157,6 +163,7 @@ class CoreApp {
 
 		// Field: fields.
 		$field = new Field();
+		$field->setKey('fields');
 		$field->setType('text');
 		$label = new Label();
 		$label->setText('Fields');
@@ -186,6 +193,7 @@ class CoreApp {
 
 		// Field: type
 		$field = new Field();
+		$field->setKey('type');
 		$field->setType('text');
 		$label = new Label();
 		$label->setText('Type');
@@ -225,6 +233,7 @@ class CoreApp {
 
 		// Field: key
 		$field = new Field();
+		$field->setKey('key');
 		$field->setType('text');
 		$label = new Label();
 		$label->setText('Key');
@@ -239,6 +248,7 @@ class CoreApp {
 
 		// Field: label
 		$field = new Field();
+		$field->setKey('label');
 		$label = new Label();
 		$label->setText('Label');
 		$field->addElement( $label );
@@ -252,6 +262,7 @@ class CoreApp {
 
 		// Field: placeholder
 		$field = new Field();
+		$field->setKey('placeholder');
 		$label = new Label();
 		$label->setText('Placeholder');
 		$field->addElement( $label );
@@ -265,6 +276,7 @@ class CoreApp {
 
 		// Field: choices.
 		$field = new Field();
+		$field->setKey('choices');
 		$label = new Label();
 		$label->setText('Choices');
 		$field->addElement( $label );

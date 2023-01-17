@@ -1,4 +1,21 @@
-<?php get_header(); ?>
+<html>
+
+	<head>
+		<link rel='stylesheet' id='saberm-inter-css' href='https://rsms.me/inter/inter.css?ver=1673915028' media='all' />
+<link rel='stylesheet' id='f2-output-css' href='http://f2.local/wp-content/plugins/f2//dist/output.css?ver=1673915028' media='all' />
+
+	<script src='http://f2.local/wp-includes/js/jquery/jquery.min.js?ver=3.6.1' id='jquery-core-js'></script>
+	<script src='http://f2.local/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js'></script>
+
+	</head>
+
+	<body>
+
+<?php
+
+add_filter( 'show_admin_bar', '__return_false' );
+
+// get_header(); ?>
 
 <div>
   <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
@@ -198,7 +215,7 @@
   </div>
 </div>
 
-<?php get_footer(); ?>
+<?php // get_footer(); ?>
 
 <?php
 $appObj = new \F2\App;
@@ -212,6 +229,16 @@ if( $post->post_name === 'app' ) {
 echo '<script>var f2app = ' . json_encode($app) . '</script>';
 ?>
 
+<script src='http://f2.local/wp-includes/js/underscore.min.js?ver=1.13.4' id='underscore-js'></script>
+<script src='http://f2.local/wp-includes/js/backbone.min.js?ver=1.4.1' id='backbone-js'></script>
+<script id='wp-api-request-js-extra'>
+var wpApiSettings = {"root":"http:\/\/f2.local\/wp-json\/","nonce":"bec5129f0c","versionString":"wp\/v2\/"};
+</script>
+<script src='http://f2.local/wp-includes/js/api-request.min.js?ver=6.1.1' id='wp-api-request-js'></script>
+<script src='http://f2.local/wp-includes/js/wp-api.min.js?ver=6.1.1' id='wp-api-js'></script>
 <script src='http://f2.local/wp-content/plugins/f2/src/main.js?ver=1672806654' id='f2-main-js'></script>
 <script src='http://f2.local/wp-content/plugins/f2/src/f2.data.js?ver=1672806654' id='f2-data-js'></script>
 <script src='http://f2.local/wp-content/plugins/f2/src/f2.processor.js?ver=1672806654' id='f2-processor-js'></script>
+
+</body>
+</html>

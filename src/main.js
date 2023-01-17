@@ -49,7 +49,6 @@ const f2 = {
 
 			f2.modelContainerCreate(model, showModelByDefault)
 
-			f2.modelRender(model)
 			f2.makeCollectionContainer(model)
 			f2.recordsChangeHandler(model)
 
@@ -143,10 +142,6 @@ const f2 = {
 				targetEl.classList.remove('hidden')
 			})
 		}
-
-	},
-
-	modelRender(model) {
 
 	},
 
@@ -351,7 +346,6 @@ const f2 = {
 
 		const modelName = f2.modelNameFromKey(model.key)
 
-
 		let post = new wp.api.models[modelName]()
 		post.fetch({ data: { per_page: 25 } }).done((resp) => {
 
@@ -406,8 +400,11 @@ const f2 = {
 
 		f2.modelLookup[modelKey].form.fields.forEach((field) => {
 
+			console.log('in the fields loop during header output...')
+			console.log(field)
+
 			const headerElField = document.createElement('th')
-			headerElField.innerHTML = field.key
+			headerElField.innerHTML = field.elements[0].text
 			headerElField.className = 'py-3.5 pl-3 pr-3 text-left text-sm font-semibold text-gray-900';
 			tableHeaderRowEl.appendChild(headerElField)
 

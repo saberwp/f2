@@ -148,6 +148,33 @@ Loop over the model data contained in f2app.models. f2app models is the JSON rep
 
  ## f2.renderField()
 
+ ## f2.screensInit()
+ Creates an array of "screens" which represent the different parts of an F2 app. The dashboard and docs are default screens. Each app model becomes a single screen.
+
+## f2.screensMake()
+Makes the screen elements and inserts them into the DOM. These screens were already defined with f2.screensInit().
+See f2.screens.forEach() loop over screens defined.
+
+## f2.modelNameFromKey(modelKey)
+Important utility function for when you have the modelKey (model.key) and you need the model name with uppercase first letter. This is the format required to get the Backbone model from wp.api.models.
+
+## f2.formProcessor(model)
+Badly named function because this function actually sets up the event listener for form processing. It does also contain the form processing routine. Should be refactored to separate init from process.
+
+## f2.fetchRecords(model)
+For the given model, fetch records.
+Records one fetched are stored in f2.records[model.key].collection.
+f2.triggerRecordsLoadedEvent(model) is called after records fetched and stored.
+
+## f2.recordLookup(modelKey)
+Creates a record lookup where the record ID is used as a key. Records are parsed from the collection, which is numeric indexed.
+
+## f2.renderRecords(modelKey)
+Renders records for the given modelKey (model.key).
+
  # Known Issues
 
- After a new Post Type is registered from an F2 app model, the permalinks need to be flushed otherwise certain features of the post type may not work. This may be why at times wp.api.models does not include the new post type model.
+1. After a new Post Type is registered from an F2 app model, the permalinks need to be flushed otherwise certain features of the post type may not work. This may be why at times wp.api.models does not include the new post type model.
+2. No support for conditional fields that show/hide based on other field values in the form.
+3. No support for repeating fields or repeating field groups.
+4. No support for inline creation of related objects.

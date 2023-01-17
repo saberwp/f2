@@ -36,6 +36,7 @@ class App {
 
 			// Register meta fields.
 			foreach( $model->form->fields as $field ) {
+
 				$result = register_meta( 'post', $field->key, array(
 					'object_subtype' => $model->key,
 			    'type'           => 'string',

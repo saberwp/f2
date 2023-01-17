@@ -32,16 +32,9 @@ require_once( F2_PATH . '/lib/FieldType/PostSelect.php' );
 add_action('init', function() {
 
 	require_once( F2_PATH . '/wp/post-types/app.php' );
+
 	$coreApp = new \F2\CoreApp();
 	$app = $coreApp->make();
-
-	/*
-	echo '<pre>';
-	echo 'CORE APP: <br />';
-	var_dump( $app );
-	echo '</pre>';
-	*/
-
 	$app->storageInit();
 
 	$appPosts = get_posts(array(
@@ -56,20 +49,10 @@ add_action('init', function() {
 				continue;
 			}
 			$app = $appObj->make($appPost->ID);
-
-			/*
-			echo '<pre>';
-			echo 'POST APP: <br />';
-			var_dump( $app );
-			echo '</pre>';
-			die();
-			*/
-
 			$app->storageInit();
 		}
 	}
-
-});
+}, 1);
 
 // Provide single app template.
 add_filter('single_template', function( $template, $type, $templates ) {

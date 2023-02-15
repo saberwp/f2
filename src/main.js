@@ -49,7 +49,6 @@ const f2 = {
 
 			f2.modelContainerCreate(model, showModelByDefault)
 
-			f2.modelRender(model)
 			f2.makeCollectionContainer(model)
 			f2.recordsChangeHandler(model)
 
@@ -124,9 +123,6 @@ const f2 = {
 		})
 		menuContainer.innerHTML = menuHtml
 		const menuItems = menuContainer.querySelectorAll('a')
-
-		console.log(menuItems)
-
 		for (let i = 0; i < menuItems.length; i++) {
 		  const menuItem = menuItems[i]
 			const screen = f2.screens[i]
@@ -149,10 +145,6 @@ const f2 = {
 
 	},
 
-	modelRender(model) {
-
-	},
-
 	getModelContainer(modelKey) {
 		return f2.modelContainers[modelKey]
 	},
@@ -170,7 +162,6 @@ const f2 = {
 		}
 
 		const cont = f2.screenEl('f2-app-screen-model-'+model.key)
-		console.log(cont)
 		cont.appendChild(el)
 		f2.modelContainers[model.key] = el
 	},
@@ -190,8 +181,8 @@ const f2 = {
 		formEl.appendChild(objectIdEl)
 
 		// Render field groups.
-		model.form.fieldGroups.forEach((fieldGroup, index) => {
-			f2.renderField(fieldGroup, formEl)
+		model.form.fields.forEach((field, index) => {
+			f2.renderField(field, formEl)
 		})
 
 		// Add save button.
@@ -229,32 +220,71 @@ const f2 = {
 
 	appCreateProcess(objectId, formValues) {
 
-		// Make model post because it is an app being saved.
-		let modelPoster = new wp.api.models.Model({
-			title: 'App Default Model',
-			meta: {
-				name: 'Model Storage 123',
-				forms: '1,2,3'
-			},
-			status: 'publish'
-		})
-		modelPoster.save().done((modelObj) => {
+		// Saving existing app.
+		if( objectId > 0 ) {
 
-			console.log('model created:')
-			console.log(modelObj)
-
-			// Make app.
-			let modelPoster = new wp.api.models.App({
-				title: 'App',
+			let app = new wp.api.models.App({
+				id: objectId,
+				title: formValues.app_name,
 				meta: {
-					app_name: 'App Created',
-					models: String(modelObj.id)
+					app_name: formValues.app_name,
+					models: formValues.models,
+				},
+			})
+			app.save().done((app) => {
+				f2.triggerRecordsChangedEvent( f2.modelLookup['app'] )
+			})
+
+		}
+
+		// If saving new app, then we make related objects.
+		if( 0 == objectId ) {
+
+			// Make form.
+			let formPoster = new wp.api.models.Form({
+				title: formValues.app_name+ ' Form',
+				meta: {
+					name: formValues.app_name+ ' Form',
+					fields: '1,2,3'
 				},
 				status: 'publish'
 			})
-			modelPoster.save()
-		})
+			formPoster.save().done((formObj) => {
 
+				// Make model.
+				let modelPoster = new wp.api.models.Model({
+					title: formValues.app_name+ ' Model',
+					meta: {
+						name: formValues.app_name+ ' Model',
+						forms: String(formObj.id)
+					},
+					status: 'publish'
+				})
+				modelPoster.save().done((modelObj) => {
+
+					// Make app.
+					let app = new wp.api.models.App({
+						title: formValues.app_name,
+						meta: {
+							app_name: formValues.app_name,
+							models: String(modelObj.id)
+						},
+						status: 'publish'
+					})
+					app.save().done((app) => {
+						f2.triggerRecordsChangedEvent( f2.modelLookup['app'] )
+					})
+
+				})
+
+			})
+
+		}
+
+	},
+
+	modelNameFromKey(modelKey) {
+		return modelKey.charAt(0).toUpperCase() + modelKey.slice(1)
 	},
 
 	formProcessor(model) {
@@ -264,8 +294,6 @@ const f2 = {
 
 			const modelKey = e.target.getAttribute('modelKey')
 			const appFormEl = document.getElementById('f2-app-form-'+modelKey)
-
-
 
 			// Prevent default post submit.
 			e.preventDefault()
@@ -283,7 +311,6 @@ const f2 = {
 
 			// Initialize special process for "app" models.
 			if('app' === modelKey) {
-				console.log('modelKey is app...')
 				f2.appCreateProcess(objectId, formValues)
 				return
 			}
@@ -297,66 +324,43 @@ const f2 = {
 			  meta: formValues,
 			}
 
-			// New WP Backbone PUT.
+			// Set Backbone POST/PUT vars.
 			let postObject = {
 				meta: formValues,
+				status: 'publish',
 			}
 			if( objectId > 0 ) {
 				postObject.id = objectId
 			}
-			let post = new wp.api.models.App(postObject)
+
+			// Get capitalized model name from key.
+			const modelName = f2.modelNameFromKey(modelKey)
+			let post = new wp.api.models[modelName](postObject)
 			const fetchResult = post.save().done((resp) => {
-				console.log('App post/fetch/done:')
-				console.log(resp)
 				f2.triggerRecordsChangedEvent(model)
 			})
-
-			// Choose endpoint, protocol based on objectId.
-			/*
-			let endpoint = 'http://f2.local/wp-json/wp/v2/'+model.key
-			let protocol = 'POST'
-			if( objectId > 0 ) {
-				endpoint += '/' + objectId
-				protocol = 'PUT'
-			}
-
-			fetch(endpoint, {
-			  method: protocol,
-			  body: JSON.stringify(postData),
-			  headers: {
-					"Content-type": "application/json; charset=UTF-8",
-					'Authorization': "Basic " + btoa('admin' + ':' + 'hcLS qRJv LQxT 1bqa G6Xe OozD'),
-				}
-			})
-			.then(response => response.json())
-			.then(data => {
-				f2.triggerRecordsChangedEvent(model)
-			})
-			.catch(err => console.log(err));
-
-			*/
-
 		})
-
 	},
 
 	fetchRecords(model) {
-		let endpoint = 'http://f2.local/wp-json/wp/v2/' + model.key
-		let protocol = 'GET'
-		fetch(endpoint, {
-			method: protocol,
-			headers: {
-				"Content-type": "application/json; charset=UTF-8",
-				'Authorization': "Basic " + btoa('admin' + ':' + 'hcLS qRJv LQxT 1bqa G6Xe OozD'),
-			}
-		})
-		.then(response => response.json())
-		.then(records => {
-			f2.records[model.key].collection = records
+
+		const modelName = f2.modelNameFromKey(model.key)
+
+		let post = new wp.api.models[modelName]()
+		post.fetch({ data: { per_page: 25 } }).done((resp) => {
+
+			f2.records[model.key].collection = resp
 			f2.recordLookup(model.key)
 			f2.renderRecords(model.key)
+
+			// Update dashboard count.
+			const recordCountEl = document.getElementById('dashboard-record-count-' + model.key)
+			recordCountEl.innerHTML = f2.records[model.key].collection.length
+
+			f2.triggerRecordsLoadedEvent(model)
+
 		})
-		.catch(err => console.log(err));
+
 	},
 
 	recordLookup(modelKey) {
@@ -389,12 +393,21 @@ const f2 = {
 		tableHeaderRowEl.appendChild(headerElId)
 
 		// Field headers.
-		f2.modelLookup[modelKey].form.fieldGroups.forEach((field) => {
-			const headerElField = document.createElement('th')
+
+		// This should be a loop over "Fields" that contain "Elements", but it is not!
+		// Core app seems to be a loop over "Controls" under form.fields[].
+		// @TODO address inconsistencies in field/element structure under forms (in CoreApp).
+
+		f2.modelLookup[modelKey].form.fields.forEach((field) => {
+
+			console.log('in the fields loop during header output...')
 			console.log(field)
+
+			const headerElField = document.createElement('th')
 			headerElField.innerHTML = field.elements[0].text
 			headerElField.className = 'py-3.5 pl-3 pr-3 text-left text-sm font-semibold text-gray-900';
 			tableHeaderRowEl.appendChild(headerElField)
+
 		})
 
 		// Table header controls.
@@ -408,7 +421,7 @@ const f2 = {
 
 		// Set create button text.
 		const createButton = tableEl.querySelector('.f2-create-button')
-		createButton.innerHTML = 'Create '+f2.modelLookup[modelKey].storage.singleName
+		createButton.innerHTML = 'Create '+f2.modelLookup[modelKey].storage.single_name
 		createButton.setAttribute('modelKey',modelKey)
 		createButton.addEventListener('click', f2.createClick)
 
@@ -438,19 +451,40 @@ const f2 = {
 	},
 
 	renderField( field, targetEl ) {
+
+		console.log('renderField called here...')
+		console.log( field )
+		console.log( field.type )
+
 		let fieldEl = document.createElement('div')
 		fieldEl.className = 'flex flex-col gap-px mb-3'
 		field.elements.forEach( (fieldElement, index) => {
 			const fieldElementEl = f2.makeFieldElement(fieldElement)
 			fieldEl.appendChild(fieldElementEl)
 		})
+
+		// Handle post_select with inline create.
+		if(field.typeKey === 'post_select') {
+			const inlineCreateButton = document.createElement('button')
+			inlineCreateButton.id = 'f2-inline-create'
+			inlineCreateButton.innerHTML = 'INLINE CREATE +'
+			fieldEl.appendChild(inlineCreateButton)
+		}
+
 		targetEl.appendChild(fieldEl)
+
+		// Handle post_select with inline create.
+		if(field.typeKey === 'post_select') {
+			// Init button click event.
+			f2.inlineCreate.buttonClick()
+		}
+
 	},
 
 	makeFieldElement(fieldElement) {
+
 		let el = ''
 		if( 'control' === fieldElement.elementType ) {
-			console.log(fieldElement.type)
 			if( fieldElement.type === 'text_area' ) {
 				el = document.createElement('textarea')
 				el.className = 'border border-solid border-gray-800 p-2'
@@ -469,10 +503,12 @@ const f2 = {
 				el.innerHTML = choiceOptions
 			}
 			if( fieldElement.type === 'select' ) {
+
 				el = document.createElement('select')
 				el.className = 'border border-solid border-gray-800 p-2'
 				el.id = fieldElement.key
-				let choiceOptions = '<option value="0">Select Author</option>'
+				let choiceOptions = '<option value="0">Select Choice</option>'
+
 				if( null !== fieldElement.choices && undefined !== fieldElement.choices && fieldElement.choices.length > 0 ) {
 					fieldElement.choices.forEach((choice) => {
 						choiceOptions += '<option value="' + choice.value + '">' + choice.label + '</option>'
@@ -481,9 +517,7 @@ const f2 = {
 				el.innerHTML = choiceOptions
 			}
 			if( fieldElement.type === 'text' || fieldElement.type == 'Text Not Set') {
-				console.log('hello hello!!!')
 				el = fieldTypeText.make(fieldElement)
-				console.log(el)
 			}
 		}
 		if( 'label' === fieldElement.elementType ) {
@@ -503,7 +537,7 @@ const f2 = {
 
 		// Add form to slideover.
 		f2.appFormCreate(model)
-		f2.slideoverSetTitle("Edit "+model.storage.singleName)
+		f2.slideoverSetTitle("Edit "+model.storage.single_name)
 		f2.formProcessor(model)
 
 		// Open slideover.
@@ -531,7 +565,7 @@ const f2 = {
 
 		// Add form to slideover.
 		f2.appFormCreate(model)
-		f2.slideoverSetTitle("Create "+model.storage.singleName)
+		f2.slideoverSetTitle("Create "+model.storage.single_name)
 		f2.formProcessor(model)
 
 		// Open slideover.
@@ -544,21 +578,29 @@ const f2 = {
 		const modelKey = btn.getAttribute('model-key')
 		const objectId = btn.getAttribute('object-id')
 
-		/* DELETE request. */
-		fetch( 'http://f2.local/wp-json/wp/v2/' + modelKey + '/' + objectId + '?force=true', {
-			method:'DELETE',
-      credentials: 'include',
-			headers: {
-			  'Content-Type': 'application/json',
-				'Authorization': "Basic " + btoa('admin' + ':' + 'hcLS qRJv LQxT 1bqa G6Xe OozD'),
-			},
-		})
-		.then(response => response.json())
-		.then(json => {
-			f2.triggerRecordsChangedEvent(f2.modelLookup[modelKey])
-		})
-		.catch(err => console.log(err));
+		// Get capitalized model name from key.
+		const modelName = f2.modelNameFromKey(modelKey)
 
+		const postObject = {
+			id: objectId
+		}
+
+		let post = new wp.api.models[modelName](postObject)
+		const fetchResult = post.destroy().done((resp) => {
+			const model = f2.modelLookup[modelKey]
+			f2.triggerRecordsChangedEvent(model)
+		})
+
+
+	},
+
+	triggerRecordsLoadedEvent(model) {
+		const event = new CustomEvent('f2_records_loaded', {
+      detail: {
+        model: model
+      }
+		});
+		document.dispatchEvent(event);
 	},
 
 	triggerRecordsChangedEvent(model) {
@@ -637,8 +679,19 @@ const dashboard = {
 	make() {
 		el = document.createElement('div')
 		let h = '<div><h2 class="text-sm font-medium text-gray-500">App Models</h2><ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">'
+
+
+
 		f2.models.forEach((model) => {
-			h += '<li class="col-span-1 flex rounded-md shadow-sm"><div class="flex-shrink-0 flex items-center justify-center w-16 bg-pink-600 text-white text-sm font-medium rounded-l-md">AM</div><div class="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white"><div class="flex-1 truncate px-4 py-2 text-sm"><a href="#" class="font-medium text-gray-900 hover:text-gray-600">'+model.storage.name+'</a><p class="text-gray-500">0 records</p></div><div class="flex-shrink-0 pr-2"><button type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"><span class="sr-only">Open options</span><svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"/></svg></button></div></div></li>'
+
+			console.log(f2.records)
+			console.log(model.key)
+			console.log(f2.records[model.key].collection)
+
+			const recordCount = f2.records[model.key].collection.length
+
+			h += '<li class="col-span-1 flex rounded-md shadow-sm"><div class="flex-shrink-0 flex items-center justify-center w-16 bg-pink-600 text-white text-sm font-medium rounded-l-md">AM</div><div class="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white"><div class="flex-1 truncate px-4 py-2 text-sm"><a href="#" class="font-medium text-gray-900 hover:text-gray-600">'+model.storage.name+'</a><p class="text-gray-500">'
+			h += '<span id="dashboard-record-count-' + model.key + '">-</span> records</p></div><div class="flex-shrink-0 pr-2"><button type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"><span class="sr-only">Open options</span><svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"/></svg></button></div></div></li>'
 		})
 		h += '</ul></div>'
 		el.innerHTML = h

@@ -1,5 +1,7 @@
 <?php
 
+namespace F2;
+
 class Fetch {
 
 	public $postType = 'post';

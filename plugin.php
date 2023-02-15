@@ -22,11 +22,18 @@ require_once( F2_PATH . '/lib/Schema.php' );
 require_once( F2_PATH . '/lib/Fetch.php' );
 require_once( F2_PATH . '/lib/Model.php' );
 
+// Field Types.
+require_once( F2_PATH . '/lib/FieldType/Text.php' );
+require_once( F2_PATH . '/lib/FieldType/Select.php' );
+require_once( F2_PATH . '/lib/FieldType/Button.php' );
+require_once( F2_PATH . '/lib/FieldType/PostSelect.php' );
+
 // Register app post types.
 add_action('init', function() {
 
 	require_once( F2_PATH . '/wp/post-types/app.php' );
-	$coreApp = new CoreApp();
+
+	$coreApp = new \F2\CoreApp();
 	$app = $coreApp->make();
 	$app->storageInit();
 
@@ -36,7 +43,7 @@ add_action('init', function() {
 	));
 
 	if( ! empty( $appPosts )) {
-		$appObj = new App;
+		$appObj = new \F2\App;
 		foreach( $appPosts as $appPost ) {
 			if( $appPost->post_name === 'app' ) {
 				continue;
@@ -45,8 +52,7 @@ add_action('init', function() {
 			$app->storageInit();
 		}
 	}
-
-});
+}, 1);
 
 // Provide single app template.
 add_filter('single_template', function( $template, $type, $templates ) {
@@ -60,7 +66,44 @@ add_filter('single_template', function( $template, $type, $templates ) {
 
 }, 10, 3);
 
+// Provide docs template.
+add_filter('page_template', function( $template, $type, $templates ) {
+
+	// Target only F2 apps.
+	global $post;
+	if( 91 !== $post->ID && 95 !== $post->ID ) {
+		return $template;
+	}
+
+	if( 91 === $post->ID ) {
+		return F2_PATH . '/wp/templates/page-docs.php';
+	}
+
+	if( 95 === $post->ID ) {
+		return F2_PATH . '/wp/templates/page-builder.php';
+	}
+
+}, 10, 3);
+
 add_action('wp_enqueue_scripts', function() {
+
+	wp_enqueue_script( 'wp-api' );
+
+	wp_enqueue_script(
+		'f2-main',
+		F2_URL . '/src/main.js',
+		array( 'wp-api' ),
+		time(),
+		true
+	);
+
+	wp_enqueue_script(
+		'f2-inline-create',
+		F2_URL . '/src/f2.inlineCreate.js',
+		array( 'f2-main' ),
+		time(),
+		true
+	);
 
 	wp_enqueue_style(
 		'saberm-inter',

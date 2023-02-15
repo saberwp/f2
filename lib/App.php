@@ -1,5 +1,7 @@
 <?php
 
+namespace F2;
+
 class App {
 
 	public $models = array();
@@ -11,7 +13,9 @@ class App {
 
 	public function storageInit() {
 		if( empty( $this->models ) ) { return; }
+
 		foreach( $this->models as $model ) {
+
 			// Register post type.
 			$result = register_post_type(
 				$model->key,
@@ -19,7 +23,7 @@ class App {
 					'label'  => $model->storage->name,
 					'labels' => array(
 						'name'          => $model->storage->name,
-						'singular_name' => $model->storage->singleName,
+						'singular_name' => $model->storage->single_name,
 					),
 					'public' => true,
 					'show_in_rest' => true,
@@ -32,13 +36,15 @@ class App {
 
 			// Register meta fields.
 			foreach( $model->form->fields as $field ) {
+
 				$result = register_meta( 'post', $field->key, array(
 					'object_subtype' => $model->key,
 			    'type'           => 'string',
 				  'single'         => true,
 			    'show_in_rest'   => true,
-					'default'        => 'Text Not Set',
+					'default'        => '',
 				));
+
 			}
 		}
 	}
@@ -57,7 +63,7 @@ class App {
 		$appPost = get_post($postId);
 		$appModels = get_post_meta($appPost->ID, 'models', 1);
 
-		if( strlen( $appModels ) < 4 ) {
+		if( strlen( $appModels ) < 2 ) {
 			return $app;
 		}
 
@@ -73,7 +79,7 @@ class App {
 			$appModelPost = get_post($appModelPostId);
 			$modelKey = get_post_meta($appModelPost->ID, 'key', 1);
 			$modelName = get_post_meta($appModelPost->ID, 'name', 1);
-			$modelSingleName = get_post_meta($appModelPost->ID, 'singleName', 1);
+			$modelSingleName = get_post_meta($appModelPost->ID, 'single_name', 1);
 			$modelForms = get_post_meta($appModelPost->ID, 'forms', 1);
 
 			// Setup app object and storage.
@@ -89,6 +95,7 @@ class App {
 			$formFields = get_post_meta($formPost->ID, 'fields', 1);
 			$formFields = explode(',', $formFields); // Parse the comma-seperated list of fields (1,2,3).
 			$form = new Form();
+			$form->key = get_post_meta($formPost->ID, 'key', 1);
 
 			// Make fields.
 			$fields = [];
@@ -108,6 +115,8 @@ class App {
 					$fieldPlaceholder = get_post_meta($fieldPost->ID, 'placeholder', 1);
 					$fieldChoices = get_post_meta($fieldPost->ID, 'choices', 1);
 					$field = new Field();
+					$field->setKey($fieldKey);
+					$field->setType($fieldType);
 					$field->setClasses('flex flex-col gap-1');
 					$label = new Label();
 					$label->setText($fieldLabel);
@@ -141,14 +150,8 @@ class App {
 					}
 
 					$field->addElement($control);
-					$form->addControl($control);
-					$fields[] = $field;
+					$form->addField($field);
 				}
-			}
-
-			// Add fields to form.
-			if( ! empty( $fields ) ) {
-				$form->setFields($fields);
 			}
 
 			// Add form to model.

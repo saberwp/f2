@@ -1,4 +1,18 @@
-<?php get_header(); ?>
+<!doctype html>
+<html <?php language_attributes(); ?>>
+<head>
+	<meta charset="<?php bloginfo( 'charset' ); ?>" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<?php wp_head(); ?>
+</head>
+
+<body>
+
+<?php
+
+add_filter( 'show_admin_bar', '__return_false' );
+
+// get_header(); ?>
 
 <div>
   <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
@@ -140,7 +154,7 @@
 
     <main class="flex-1">
       <div class="py-6 px-4">
-        <?php App::render($post); ?>
+        <?php \F2\App::render($post); ?>
 				<div id="f2-slideover" class="hidden relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
 				  <!--
 				    Background backdrop, show/hide based on slide-over state.
@@ -192,24 +206,23 @@
 				</div>
 				<!-- End Slideover -->
 
-
       </div>
     </main>
   </div>
 </div>
 
-
-<?php get_footer(); ?>
-
-
 <?php
-$appObj = new App;
+$appObj = new \F2\App;
 if( $post->post_name === 'app' ) {
-	$coreApp = new CoreApp();
+	$coreApp = new \F2\CoreApp();
 	$app = $coreApp->make();
 } else {
 	$app = $appObj->make($post->ID);
 }
 echo '<script>var f2app = ' . json_encode($app) . '</script>';
 ?>
-<script src='http://f2.local/wp-content/plugins/f2/src/main.js?ver=1672806654' id='f2-main-js'></script>
+
+<?php wp_footer(); ?>
+
+</body>
+</html>

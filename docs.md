@@ -11,7 +11,6 @@ The most simplistic form of app creation involves this short series of steps.
 5. Storage for the App is setup using a Storage object which is added to the app with setStorage( $storage ) method.
 6. App::storageInit() is called and this triggers the registration of post type(s) and meta fields(s) with REST support.
 
-
 ## Internal WordPress Post Types
 
 F2 registers 3 custom post types: app, form and entry.
@@ -106,3 +105,97 @@ Choices objects provide a list of options for a choice type field including sele
 Example of choices in JSON:
 
 	[{"value":1,"label":"Author 1"},{"value":2,"label":"Author 2"}]
+
+# Schemas
+
+## App Schema
+
+models array of model objects.
+
+## Model Schema
+
+key - Unique identifier.
+name - Name of the model.
+
+## Form Schema
+
+key - Unique identifier.
+fields - array of field objects.
+
+## Field Schema
+
+key (required)
+type a field type object.
+typeKey - single unique identifier string for the type
+
+# Javascript Function Reference
+
+## f2.init()
+
+Get the appEl node. Stash this into f2.appEl. If that node does not exist, exit because there is no F2 app loaded.
+Set the app ID from the app element.
+
+Loop over the model data contained in f2app.models. f2app models is the JSON representation of the entire app structure.
+
+ Setup app screens. f2.screensInit(), f2.screensMake(). Show the screen dashboard by default with "screen" object function call.
+
+ Loop over the models and do a setup routine for each one.
+
+ 1. f2.modelContainerCreate()
+ 2. f2.modelRender(model)
+ 3. f2.makeCollectionContainer(model)
+ 4. f2.recordsChangeHandler(model)
+
+ ## f2.renderField()
+
+ ## f2.screensInit()
+ Creates an array of "screens" which represent the different parts of an F2 app. The dashboard and docs are default screens. Each app model becomes a single screen.
+
+## f2.screensMake()
+Makes the screen elements and inserts them into the DOM. These screens were already defined with f2.screensInit().
+See f2.screens.forEach() loop over screens defined.
+
+## f2.modelNameFromKey(modelKey)
+Important utility function for when you have the modelKey (model.key) and you need the model name with uppercase first letter. This is the format required to get the Backbone model from wp.api.models.
+
+## f2.formProcessor(model)
+Badly named function because this function actually sets up the event listener for form processing. It does also contain the form processing routine. Should be refactored to separate init from process.
+
+## f2.fetchRecords(model)
+For the given model, fetch records.
+Records one fetched are stored in f2.records[model.key].collection.
+f2.triggerRecordsLoadedEvent(model) is called after records fetched and stored.
+
+## f2.recordLookup(modelKey)
+Creates a record lookup where the record ID is used as a key. Records are parsed from the collection, which is numeric indexed.
+
+## f2.renderRecords(modelKey)
+Renders records for the given modelKey (model.key).
+
+## f2.appMenuSetup()
+Setup the application menu.
+Uses f2.screens.forEach(). Screens available defines what menu items to create.
+
+## f2.getModelContainer(modelKey)
+Using the given modelKey get the model container in the DOM.
+Model container DOM elements are stored in a reference at f2.modelContainers.
+
+## f2.appFormCreate(model)
+For the given model, create the app form.
+
+## f2.tableTemplate()
+Provides HTML template for table rendering.
+
+## f2.renderField( field, targetEl )
+Render a single field. Calls f2.makeFieldElement(fieldElement) to render elements contained in the field.
+
+## f2.makeFieldElement(fieldElement)
+Crucial function that does the creation of each field element. The element is either a label or control. If it is a control, then the type of control determines the type of DOM element created.
+
+
+# Known Issues
+
+1. After a new Post Type is registered from an F2 app model, the permalinks need to be flushed otherwise certain features of the post type may not work. This may be why at times wp.api.models does not include the new post type model.
+2. No support for conditional fields that show/hide based on other field values in the form.
+3. No support for repeating fields or repeating field groups.
+4. No support for inline creation of related objects.

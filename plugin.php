@@ -4,9 +4,14 @@
  * Plugin Name: F2 WordPress Plugin
  */
 
+/*
+ * File Docs
+ * LOC: 87
+ */
+
 define( 'F2_PATH', plugin_dir_path( __FILE__ ) );
 define( 'F2_URL', plugin_dir_url( __FILE__ ) );
-define( 'F2_VERSION', '0.0.1' );
+define( 'F2_VERSION', '0.0.2' );
 define( 'F2_TEXT_DOMAIN', 'acf-engine');
 
 require_once( F2_PATH . '/lib/App.php' );

@@ -39,6 +39,10 @@ require_once( F2_PATH . '/lib/FieldType/Select.php' );
 require_once( F2_PATH . '/lib/FieldType/Button.php' );
 require_once( F2_PATH . '/lib/FieldType/PostSelect.php' );
 
+// Initiate the Core App.
+$ca = new \F2\CoreApp;
+$ca->init();
+
 // Register app post types.
 add_action('init', function() {
 

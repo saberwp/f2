@@ -4,6 +4,30 @@ namespace F2;
 
 class CoreApp {
 
+	public function init() {
+
+		// Add rewrite to form the custom /f2 route.
+		add_action('init', function() {
+			add_rewrite_rule('^f2/?', 'index.php?f2=1', 'top');
+		});
+
+		// Add query vars for f2.
+		add_filter('query_vars', function( $vars ) {
+			$vars[] = 'f2';
+			return $vars;
+		});
+
+		// Use custom template for core app. Checks if query var (path is f2) exists.
+		add_filter('template_include', function( $template ) {
+			if (get_query_var('f2')) {
+				return F2_PATH . '/wp/templates/core-app.php';
+			}
+			return $template;
+		});
+
+
+	}
+
 	public function make() {
 
 		// Setup app object and storage.

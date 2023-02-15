@@ -451,13 +451,34 @@ const f2 = {
 	},
 
 	renderField( field, targetEl ) {
+
+		console.log('renderField called here...')
+		console.log( field )
+		console.log( field.type )
+
 		let fieldEl = document.createElement('div')
 		fieldEl.className = 'flex flex-col gap-px mb-3'
 		field.elements.forEach( (fieldElement, index) => {
 			const fieldElementEl = f2.makeFieldElement(fieldElement)
 			fieldEl.appendChild(fieldElementEl)
 		})
+
+		// Handle post_select with inline create.
+		if(field.typeKey === 'post_select') {
+			const inlineCreateButton = document.createElement('button')
+			inlineCreateButton.id = 'f2-inline-create'
+			inlineCreateButton.innerHTML = 'INLINE CREATE +'
+			fieldEl.appendChild(inlineCreateButton)
+		}
+
 		targetEl.appendChild(fieldEl)
+
+		// Handle post_select with inline create.
+		if(field.typeKey === 'post_select') {
+			// Init button click event.
+			f2.inlineCreate.buttonClick()
+		}
+
 	},
 
 	makeFieldElement(fieldElement) {

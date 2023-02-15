@@ -172,7 +172,28 @@ Creates a record lookup where the record ID is used as a key. Records are parsed
 ## f2.renderRecords(modelKey)
 Renders records for the given modelKey (model.key).
 
- # Known Issues
+## f2.appMenuSetup()
+Setup the application menu.
+Uses f2.screens.forEach(). Screens available defines what menu items to create.
+
+## f2.getModelContainer(modelKey)
+Using the given modelKey get the model container in the DOM.
+Model container DOM elements are stored in a reference at f2.modelContainers.
+
+## f2.appFormCreate(model)
+For the given model, create the app form.
+
+## f2.tableTemplate()
+Provides HTML template for table rendering.
+
+## f2.renderField( field, targetEl )
+Render a single field. Calls f2.makeFieldElement(fieldElement) to render elements contained in the field.
+
+## f2.makeFieldElement(fieldElement)
+Crucial function that does the creation of each field element. The element is either a label or control. If it is a control, then the type of control determines the type of DOM element created.
+
+
+# Known Issues
 
 1. After a new Post Type is registered from an F2 app model, the permalinks need to be flushed otherwise certain features of the post type may not work. This may be why at times wp.api.models does not include the new post type model.
 2. No support for conditional fields that show/hide based on other field values in the form.

@@ -89,6 +89,22 @@ add_action('wp_enqueue_scripts', function() {
 
 	wp_enqueue_script( 'wp-api' );
 
+	wp_enqueue_script(
+		'f2-main',
+		F2_URL . '/src/main.js',
+		array( 'wp-api' ),
+		time(),
+		true
+	);
+
+	wp_enqueue_script(
+		'f2-inline-create',
+		F2_URL . '/src/f2.inlineCreate.js',
+		array( 'f2-main' ),
+		time(),
+		true
+	);
+
 	wp_enqueue_style(
 		'saberm-inter',
 		'https://rsms.me/inter/inter.css',

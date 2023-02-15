@@ -7,6 +7,12 @@
 /*
  * File Docs
  * LOC: 87
+ * Functions:
+ ***** Require PHP classes.
+ ***** Register App post types including first, \F2\CoreApp().
+ ***** Filter single_template.
+ ***** Filter page_template.
+ ***** Action wp_enqueue_scripts, enq, 3 scripts and 1 stylesheet, TW output.
  */
 
 define( 'F2_PATH', plugin_dir_path( __FILE__ ) );

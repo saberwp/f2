@@ -129,9 +129,33 @@ add_action('wp_enqueue_scripts', function() {
 	);
 
 	wp_enqueue_script(
+		'f2-slide-over',
+		F2_URL . 'src/f2.slideOver.js',
+		array( 'f2-main' ),
+		time(),
+		true
+	);
+
+	wp_enqueue_script(
+		'f2-screen',
+		F2_URL . 'src/f2.screen.js',
+		array( 'f2-main' ),
+		time(),
+		true
+	);
+
+	wp_enqueue_script(
+		'f2-field-types-text',
+		F2_URL . 'src/fieldTypes/text.js',
+		array( 'f2-main' ),
+		time(),
+		true
+	);
+
+	wp_enqueue_script(
 		'f2-init',
 		F2_URL . 'src/f2.init.js',
-		array( 'f2-docs', 'f2-dashboard' ),
+		array( 'f2-docs', 'f2-dashboard', 'f2-slide-over', 'f2-field-types-text', 'f2-screen' ),
 		time(),
 		true
 	);

@@ -1,10 +1,6 @@
-console.log('in f2.docs')
-console.log(f2)
-
 f2.docs = {
-	make() {
 
-		console.log('make docs...')
+	make() {
 
 		el = document.createElement('div')
 		let h = '<ul>'
@@ -22,7 +18,8 @@ f2.docs = {
 		})
 		h += '</ul>'
 		el.innerHTML = h
-		screenEl = f2.screenEl('f2-app-screen-docs')
+		screenEl = f2.screen.el('f2-app-screen-docs')
 		screenEl.appendChild(el)
 	}
+
 }

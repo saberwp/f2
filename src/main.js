@@ -8,6 +8,7 @@ const f2 = {
 	modelContainers: {},
 	records: {},
 	screens: [], // Array of application screens.
+	fieldTypes: {},
 
 	init() {
 
@@ -35,9 +36,9 @@ const f2 = {
 		}
 
 		// Setup app screens.
-		f2.screensInit()
-		f2.screensMake()
-		screen.show('f2-app-screen-dashboard')
+		f2.screen.init()
+		f2.screen.make()
+		f2.screen.show('f2-app-screen-dashboard')
 
 		// Do app model init.
 		f2.models.forEach((model, index) => {
@@ -65,7 +66,7 @@ const f2 = {
 		f2.appMenuSetup()
 
 		// Slideover init.
-		f2.slideoverInit()
+		f2.slideOver.init()
 
 		// Init dashboard.
 		f2.dashboard.make()
@@ -74,46 +75,6 @@ const f2 = {
 		console.log(f2.docs)
 		f2.docs.make()
 
-	},
-
-	screensInit() {
-		const dashboardScreen = {
-			id: 'f2-app-screen-dashboard',
-			type: 'dashboard',
-			title: 'Dashboard'
-		}
-		f2.screens.push(dashboardScreen)
-		f2.models.forEach((model) => {
-			const modelScreen = {
-				id: 'f2-app-screen-model-'+model.key,
-				type: 'model',
-				title: model.storage.name
-			}
-			f2.screens.push(modelScreen)
-		})
-		const docsScreen = {
-			id: 'f2-app-screen-docs',
-			type: 'docs',
-			title: 'Documentation'
-		}
-		f2.screens.push(docsScreen)
-	},
-
-	screensMake() {
-		f2.screens.forEach((screen) => {
-			const el = document.createElement('div')
-			el.id = screen.id
-			el.className = 'hidden'
-			f2.appEl.appendChild(el)
-		})
-	},
-
-	screenEl(id) {
-		let screenMatch = false
-		f2.screens.forEach((screen) => {
-			if(screen.id === id) {screenMatch = document.getElementById(screen.id)}
-		})
-		return screenMatch
 	},
 
 	appMenuSetup() {
@@ -163,7 +124,7 @@ const f2 = {
 				// @TODO set screen to show? Or maybe do this under screen init?
 		}
 
-		const cont = f2.screenEl('f2-app-screen-model-'+model.key)
+		const cont = f2.screen.el('f2-app-screen-model-'+model.key)
 		cont.appendChild(el)
 		f2.modelContainers[model.key] = el
 	},
@@ -198,8 +159,8 @@ const f2 = {
 		contEl.appendChild(formEl)
 
 		// Append form to slideover.
-		f2.slideoverClear()
-		const cont = f2.slideoverContentEl()
+		f2.slideOver.clear()
+		const cont = f2.slideOver.contentEl()
 		cont.appendChild(contEl)
 
 	},
@@ -381,7 +342,7 @@ const f2 = {
 		tableEl.id = 'f2-app-table-'+modelKey
 
 		// Get the container screen and append.
-		const screenEl = f2.screenEl('f2-app-screen-model-'+modelKey)
+		const screenEl = f2.screen.el('f2-app-screen-model-'+modelKey)
 		screenEl.innerHTML = ''
 		screenEl.appendChild(tableEl)
 
@@ -519,7 +480,7 @@ const f2 = {
 				el.innerHTML = choiceOptions
 			}
 			if( fieldElement.type === 'text' || fieldElement.type == 'Text Not Set') {
-				el = fieldTypeText.make(fieldElement)
+				el = f2.fieldTypes.text.make(fieldElement)
 			}
 		}
 		if( 'label' === fieldElement.elementType ) {
@@ -539,11 +500,11 @@ const f2 = {
 
 		// Add form to slideover.
 		f2.appFormCreate(model)
-		f2.slideoverSetTitle("Edit "+model.storage.single_name)
+		f2.slideOver.setTitle("Edit "+model.storage.single_name)
 		f2.formProcessor(model)
 
 		// Open slideover.
-		f2.slideoverOpen()
+		f2.slideOver.open()
 
 		// Set form object ID.
 		const appFormEl = document.getElementById('f2-app-form-'+modelKey)
@@ -567,11 +528,11 @@ const f2 = {
 
 		// Add form to slideover.
 		f2.appFormCreate(model)
-		f2.slideoverSetTitle("Create "+model.storage.single_name)
+		f2.slideOver.setTitle("Create "+model.storage.single_name)
 		f2.formProcessor(model)
 
 		// Open slideover.
-		f2.slideoverOpen()
+		f2.slideOver.open()
 
 	},
 
@@ -614,62 +575,4 @@ const f2 = {
 		document.dispatchEvent(event);
 	},
 
-	slideoverInit() {
-		const close = document.getElementById('f2-slideover-close')
-		close.addEventListener('click', f2.slideoverClose)
-	},
-
-	slideoverEl() {
-		return document.getElementById('f2-slideover')
-	},
-
-	slideoverContentEl() {
-		return document.getElementById('f2-slideover-content')
-	},
-
-	slideoverOpen() {
-		const so = document.getElementById('f2-slideover')
-		so.classList.remove('hidden')
-	},
-
-	slideoverClose() {
-		const so = document.getElementById('f2-slideover')
-		so.classList.add('hidden')
-	},
-
-	slideoverClear() {
-		f2.slideoverContentEl().innerHTML = ''
-	},
-
-	slideoverSetTitle(title) {
-		document.getElementById('slide-over-title').innerHTML = title
-	}
-
-}
-
-/*
- * Field Type: Text
- */
-const fieldTypeText = {
-	make(field) {
-		let el = document.createElement('input')
-		el.type = 'text'
-		el.className = 'border border-solid border-gray-800 p-2'
-		el.id = field.key
-		el.placeholder = field.placeholder
-		return el
-	}
-}
-
-const screen = {
-	show(screenId) {
-		screen.hideAll()
-		f2.screenEl(screenId).classList.remove('hidden')
-	},
-	hideAll() {
-		f2.screens.forEach((screen) => {
-			const el = document.getElementById(screen.id)
-			el.classList.add('hidden')
-		})
-	}
 }

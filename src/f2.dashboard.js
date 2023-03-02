@@ -9,7 +9,7 @@ f2.dashboard = {
 		})
 		h += '</ul></div>'
 		el.innerHTML = h
-		screenEl = f2.screenEl('f2-app-screen-dashboard')
+		screenEl = f2.screen.el('f2-app-screen-dashboard')
 		screenEl.appendChild(el)
 	}
 }

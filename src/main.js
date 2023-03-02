@@ -11,12 +11,13 @@ const f2 = {
 
 	init() {
 
+		// Find required #f2app element. Exit if not found.
 		const appEl = document.getElementById('f2app')
-		f2.appEl = appEl // Stash app element into controller object.
 		if(!appEl) {
 			console.error('F2 application controller was unable to find the required DOM element #f2app. Exiting render process, error code 811.')
 			return; // Exit if there is no container element.
 		}
+		f2.appEl = appEl // Stash app element into controller object.
 
 		// Set app ID.
 		f2.appId = parseInt(appEl.getAttribute('app-id'))
@@ -67,10 +68,11 @@ const f2 = {
 		f2.slideoverInit()
 
 		// Init dashboard.
-		dashboard.make()
+		f2.dashboard.make()
 
 		// Init docs.
-		docs.make()
+		console.log(f2.docs)
+		f2.docs.make()
 
 	},
 
@@ -671,58 +673,3 @@ const screen = {
 		})
 	}
 }
-
-/*
- * Dashboard
- */
-const dashboard = {
-	make() {
-		el = document.createElement('div')
-		let h = '<div><h2 class="text-sm font-medium text-gray-500">App Models</h2><ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">'
-
-
-
-		f2.models.forEach((model) => {
-
-			console.log(f2.records)
-			console.log(model.key)
-			console.log(f2.records[model.key].collection)
-
-			const recordCount = f2.records[model.key].collection.length
-
-			h += '<li class="col-span-1 flex rounded-md shadow-sm"><div class="flex-shrink-0 flex items-center justify-center w-16 bg-pink-600 text-white text-sm font-medium rounded-l-md">AM</div><div class="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white"><div class="flex-1 truncate px-4 py-2 text-sm"><a href="#" class="font-medium text-gray-900 hover:text-gray-600">'+model.storage.name+'</a><p class="text-gray-500">'
-			h += '<span id="dashboard-record-count-' + model.key + '">-</span> records</p></div><div class="flex-shrink-0 pr-2"><button type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"><span class="sr-only">Open options</span><svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"/></svg></button></div></div></li>'
-		})
-		h += '</ul></div>'
-		el.innerHTML = h
-		screenEl = f2.screenEl('f2-app-screen-dashboard')
-		screenEl.appendChild(el)
-	}
-
-}
-
-const docs = {
-	make() {
-		el = document.createElement('div')
-		let h = '<ul>'
-		f2.models.forEach((model) => {
-
-			// Get collection.
-			h+='<li class="font-mono text-xs text-zinc-400">'
-			h+='<span class="font-mono text-[0.625rem] font-semibold leading-6 rounded-lg px-1.5 ring-1 ring-inset ring-emerald-300 dark:ring-emerald-400/30 bg-emerald-400/10 text-emerald-500 dark:text-emerald-400">GET</span>'
-			h+='<span class="font-bold">/wp-json/wp/v2/'+model.key+'</span></li>'
-
-			// Post create.
-			h+='<li class="font-mono text-xs text-zinc-400">'
-			h+='<span class="font-mono text-[0.625rem] font-semibold leading-6 rounded-lg px-1.5 ring-1 ring-inset ring-emerald-300 dark:ring-emerald-400/30 bg-emerald-400/10 text-emerald-500 dark:text-emerald-400">POST</span>'
-			h+='<span class="font-bold">/wp-json/wp/v2/'+model.key+'</span></li>'
-		})
-		h += '</ul>'
-		el.innerHTML = h
-		screenEl = f2.screenEl('f2-app-screen-docs')
-		screenEl.appendChild(el)
-	}
-}
-
-// Initiatization.
-f2.init()

@@ -106,15 +106,39 @@ add_action('wp_enqueue_scripts', function() {
 
 	wp_enqueue_script(
 		'f2-main',
-		F2_URL . '/src/main.js',
+		F2_URL . 'src/main.js',
 		array( 'wp-api' ),
 		time(),
 		true
 	);
 
 	wp_enqueue_script(
+		'f2-docs',
+		F2_URL . 'src/f2.docs.js',
+		array( 'f2-main' ),
+		time(),
+		true
+	);
+
+	wp_enqueue_script(
+		'f2-dashboard',
+		F2_URL . 'src/f2.dashboard.js',
+		array( 'f2-main' ),
+		time(),
+		true
+	);
+
+	wp_enqueue_script(
+		'f2-init',
+		F2_URL . 'src/f2.init.js',
+		array( 'f2-docs', 'f2-dashboard' ),
+		time(),
+		true
+	);
+
+	wp_enqueue_script(
 		'f2-inline-create',
-		F2_URL . '/src/f2.inlineCreate.js',
+		F2_URL . 'src/f2.inlineCreate.js',
 		array( 'f2-main' ),
 		time(),
 		true

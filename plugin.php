@@ -120,20 +120,4 @@ add_action('wp_enqueue_scripts', function() {
 		true
 	);
 
-	wp_enqueue_style(
-		'saberm-inter',
-		'https://rsms.me/inter/inter.css',
-		array(),
-		time(),
-		'all'
-	);
-
-	wp_enqueue_style(
-		'f2-output',
-		F2_URL . '/dist/output.css',
-		array(),
-		time(),
-		'all'
-	);
-
 });

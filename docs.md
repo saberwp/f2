@@ -11,6 +11,12 @@ The most simplistic form of app creation involves this short series of steps.
 5. Storage for the App is setup using a Storage object which is added to the app with setStorage( $storage ) method.
 6. App::storageInit() is called and this triggers the registration of post type(s) and meta fields(s) with REST support.
 
+## Runtime Execution
+
+1. Main Plugin File (plugin.php) is loaded by WordPress.
+2. All PHP classes are loaded.
+3. 
+
 ## Internal WordPress Post Types
 
 F2 registers 3 custom post types: app, form and entry.

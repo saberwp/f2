@@ -213,8 +213,8 @@ add_filter( 'show_admin_bar', '__return_false' );
 
 <?php
 
-$appObj = new \F2\App;
-$app = $appObj->make($post->ID);
+$coreApp = new \F2\CoreApp();
+$app = $coreApp->make();
 echo '<script>var f2app = ' . json_encode($app) . '</script>';
 
 ?>

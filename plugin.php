@@ -4,9 +4,20 @@
  * Plugin Name: F2 WordPress Plugin
  */
 
+/*
+ * File Docs
+ * LOC: 87
+ * Functions:
+ ***** Require PHP classes.
+ ***** Register App post types including first, \F2\CoreApp().
+ ***** Filter single_template.
+ ***** Filter page_template.
+ ***** Action wp_enqueue_scripts, enq, 3 scripts and 1 stylesheet, TW output.
+ */
+
 define( 'F2_PATH', plugin_dir_path( __FILE__ ) );
 define( 'F2_URL', plugin_dir_url( __FILE__ ) );
-define( 'F2_VERSION', '0.0.1' );
+define( 'F2_VERSION', '0.0.2' );
 define( 'F2_TEXT_DOMAIN', 'acf-engine');
 
 require_once( F2_PATH . '/lib/App.php' );
@@ -27,6 +38,10 @@ require_once( F2_PATH . '/lib/FieldType/Text.php' );
 require_once( F2_PATH . '/lib/FieldType/Select.php' );
 require_once( F2_PATH . '/lib/FieldType/Button.php' );
 require_once( F2_PATH . '/lib/FieldType/PostSelect.php' );
+
+// Initiate the Core App.
+$ca = new \F2\CoreApp;
+$ca->init();
 
 // Register app post types.
 add_action('init', function() {
